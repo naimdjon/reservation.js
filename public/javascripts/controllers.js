@@ -1,14 +1,14 @@
 
 var controllers = angular.module('reservationApp.controllers', []);
 
-controllers.controller("TimelineCtrl", function ($scope,$modal, $http, reservationHelper) {
+controllers.controller("TimelineCtrl", function ($scope,$modal, $http, reservationService) {
     this.startDate = Date.today().set({day: 1});
     $scope.startDate = this.startDate;
     this.endDate = this.startDate.clone().add(1).years();
-    this.headerMonths = reservationHelper.getHeaderMonths(this.startDate, this.endDate);
-    this.daysOfMonths = reservationHelper.getDaysOfMonths(this.startDate, this.endDate);
-    this.daysBetween = reservationHelper.daysBetween;
-    reservationHelper.getTimelineData().then(function(data){
+    this.headerMonths = reservationService.getHeaderMonths(this.startDate, this.endDate);
+    this.daysOfMonths = reservationService.getDaysOfMonths(this.startDate, this.endDate);
+    this.daysBetween = reservationService.daysBetween;
+    reservationService.getTimelineData().then(function(data){
         $scope.timelineData = data;
     });
 
@@ -39,10 +39,10 @@ controllers.controller("TimelineCtrl", function ($scope,$modal, $http, reservati
 
 
 
-var ModalInstanceCtrl = function ($scope, $modalInstance,reservationHelper,newReservationForm) {
+var ModalInstanceCtrl = function ($scope, $modalInstance,reservationService,newReservationForm) {
   $scope.newReservation = newReservationForm;
   $scope.ok = function () {
-      reservationHelper.reserveUnit(newReservationForm.name,newReservationForm.index, newReservationForm.start, newReservationForm.end)
+      reservationService.reserveUnit(newReservationForm.name,newReservationForm.index, newReservationForm.start, newReservationForm.end)
           .then(function(result){
               if(result && (result["error"] && result["error"].length>0)) {
                   $scope.newReservationError=result["error"];

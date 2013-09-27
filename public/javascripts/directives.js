@@ -2,7 +2,7 @@
 
 var directives=angular.module('reservationApp.directives', []);
 
-directives.directive('reservationDrag', function (reservationHelper) {
+directives.directive('reservationDrag', function (reservationService) {
     return {
         restrict: 'A',
         link: function (scope, elm, attrs) {
@@ -16,10 +16,10 @@ directives.directive('reservationDrag', function (reservationHelper) {
                 },
                 stop: function () {
                     var block = jQuery(this);
-                    var newStart = reservationHelper.gridCellToDate(block, scope);
+                    var newStart = reservationService.gridCellToDate(block, scope);
                     block.zIndex(block.zIndex() - 1);
                     console.log("resid:" + options.reservationId +",resourceId:"+options.resourceId+ ", newStart:" + newStart);
-                    reservationHelper.setNewStart(options.reservationId,options.resourceId,newStart)
+                    reservationService.setNewStart(options.reservationId,options.resourceId,newStart)
                         .then(function(result){
                             console.log("done!");
                         });
@@ -29,7 +29,7 @@ directives.directive('reservationDrag', function (reservationHelper) {
         }
     };
 })
-    .directive('reservationSlideNew', function (reservationHelper) {
+    .directive('reservationSlideNew', function (reservationService) {
         var slideStart;
         var index;
         return{
@@ -48,7 +48,7 @@ directives.directive('reservationDrag', function (reservationHelper) {
                         gridCell.addClass("selectClass");
                         slideCells.push(gridCell);
                         index=gridCell.parent().index();
-                        slideStart  = reservationHelper.gridCellToDate(gridCell, scope);
+                        slideStart  = reservationService.gridCellToDate(gridCell, scope);
                     }
                 });
                 e.bind('mouseup', function (event) {
@@ -57,7 +57,7 @@ directives.directive('reservationDrag', function (reservationHelper) {
                         for (var i = 0; i < slideCells.length; i++) {
                             slideCells[i].removeClass("selectClass");
                         }
-                        var slideEnd = reservationHelper.gridCellToDate(jQuery(this), scope);
+                        var slideEnd = reservationService.gridCellToDate(jQuery(this), scope);
                         if(slideStart.equals(slideEnd))
                             slideEnd.add(1).days();
                         console.log(slideEnd.compareTo(slideStart));
@@ -74,7 +74,7 @@ directives.directive('reservationDrag', function (reservationHelper) {
             }
         }
     })
-    .directive('reservationResize', function (reservationHelper) {
+    .directive('reservationResize', function (reservationService) {
         return {
             restrict: 'A',
             link: function (scope, elm, attrs) {
@@ -85,7 +85,7 @@ directives.directive('reservationDrag', function (reservationHelper) {
                     grid: cellWidth,
                     stop: function () {
                         var block = jQuery(this);
-                        var newStart = reservationHelper.gridCellToDate(block, scope);
+                        var newStart = reservationService.gridCellToDate(block, scope);
                         var width = block.outerWidth();
                         var numberOfDays = Math.round(width / cellWidth);
                         console.log("numberOfDays:" + numberOfDays + ",resid:" + options.reservationId+ ", newStart:" + newStart);

@@ -1,8 +1,8 @@
 'use strict';
 
-var factories = angular.module('reservationApp.services', []);
+var services = angular.module('reservationApp.services', []);
 
-factories.factory('reservationHelper', function ($http,$location) {
+services.factory('reservationService', function ($http,$location) {
     var urlPath=$location.path();
     var timelineData;
 
@@ -14,8 +14,6 @@ factories.factory('reservationHelper', function ($http,$location) {
             });
         return promise;
     };
-
-
 
 
     var getDaysOfMonths=function getDaysOfMonths(startDate, endDate) {
@@ -34,18 +32,18 @@ factories.factory('reservationHelper', function ($http,$location) {
     }
 
 
-    var  getHeaderMonths=function getHeaderMonths(startDate, endDate) {
-            var headerMonths = [];
-            var counterDate = startDate.clone();
-            while (counterDate < endDate) {
-                var headerMonth = []
-                headerMonth.monthWithYear = counterDate.toString("MMM/yyyy");
-                headerMonth.daysInMonth = Date.getDaysInMonth(counterDate.getFullYear(), counterDate.getMonth());
-                headerMonth.widthOfMonth = (headerMonth.daysInMonth * cellWidth) - 1;
-                headerMonths.push(headerMonth);
-                counterDate.add(1).months();
-            }
-            return headerMonths;
+    var getHeaderMonths = function getHeaderMonths(startDate, endDate) {
+        var headerMonths = [];
+        var counterDate = startDate.clone();
+        while (counterDate < endDate) {
+            var headerMonth = []
+            headerMonth.monthWithYear = counterDate.toString("MMM/yyyy");
+            headerMonth.daysInMonth = Date.getDaysInMonth(counterDate.getFullYear(), counterDate.getMonth());
+            headerMonth.widthOfMonth = (headerMonth.daysInMonth * cellWidth) - 1;
+            headerMonths.push(headerMonth);
+            counterDate.add(1).months();
+        }
+        return headerMonths;
     };
 
     var daysBetween = function (startDate, endDate) {
