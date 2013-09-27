@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
+        "http://www.w3.org/TR/html4/strict.dtd">
 
 <html lang="en" ng-app="reservationApp">
 <head>
@@ -9,100 +9,93 @@
     <script type="text/javascript" src="/javascripts/lib/angular_1.2.0-rc.2.min.js"></script>
     <script type="text/javascript" src="/javascripts/lib/date.js"></script>
     <script type="text/javascript" src="/javascripts/lib/ui-bootstrap-tpls-0.6.0.js"></script>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/lib/jquery-ui-1.9.2.css" />
-   	<!--<link rel="stylesheet" type="text/css" href="/stylesheets/jquery-ui.css" />-->
-   	<link rel="stylesheet" type="text/css" href="/stylesheets/lib/reset.css" />
-    <!--<link rel="stylesheet" type="text/css" href="/stylesheets/reservation.js.css" />-->
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/lib/jquery-ui-1.9.2.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="/stylesheets/jquery-ui.css" />-->
+    <link rel="stylesheet" type="text/css" href="/stylesheets/lib/reset.css"/>
+    <link rel='stylesheet' href='/stylesheets/style.css'/>
     <link rel="stylesheet" type="text/css" href="/stylesheets/lib/bootstrap-combined.min.css"/>
-    <style type="text/css">
-        div.selectClass{background: #fbd850;cursor:pointer;}
-    </style>
     <script type="text/javascript" src="/javascripts/services.js"></script>
     <script type="text/javascript" src="/javascripts/directives.js"></script>
     <script type="text/javascript" src="/javascripts/controllers.js"></script>
     <script type="text/javascript" src="/javascripts/app.js"></script>
 </head>
 
-  <body>
-  <div id="root-timeline"  ng-controller="TimelineDatesCtrl as timeline" style="width: 1053px;">
-      <div class="timeline-content" ng-style="{height:'{{timelineData.length*60}}px'}">
-          <div class="resource-header">
-              <div class="resource-header-item" ng-repeat="hytte in timelineData">
-                  <div class="resource-header-item-name">
-                      {{hytte.name}}
-                  </div>
-              </div>
-          </div>
-         <div class="timeline-slide-container">
-              <div class="timeline-header">
-                  <div class="timeline-header-months">
-                         <div class="timeline-header-month"
-                              ng-repeat="headerMonth in timeline.headerMonths" ng-style="{width:'{{headerMonth.widthOfMonth}}px'}">
-                             {{headerMonth.monthWithYear}}
-                         </div>
-                  </div>
-                  <div class="timeline-header-days">
-                      <div class="timeline-header-day" ng-repeat="dayOfMonth in timeline.daysOfMonths">
-                         {{dayOfMonth.day}}
-                     </div>
-                  </div>
-              </div>
-              <div class="timeline-grid">
-                  <div class="timeline-grid-row" ng-repeat="hytte in timelineData">
-                      <div class="timeline-grid-row-cell"
-                           ng-bind="dayOfMonth"
-                           ng-repeat="dayOfMonth in timeline.daysOfMonths"
-                           ng-class="{dayWeekend : dayOfMonth.isWeekend}"
-                              booking-slide-new>
-                      </div>
-                  </div>
-              </div>
-              <div class="bookingstimeline-blocks">
-                  <div class="bookingstimeline-block-container" ng-repeat="hytte in timelineData">
-                      <div class="bookingstimeline-block"
-                           ng-repeat="booking in hytte.series"
-                           ng-style="{left:'{{timeline.daysBetween(timeline.startDate,booking.start) * 21 + 3}}px',width:'{{timeline.daysBetween(booking.start,booking.end)*21-9}}px'}"
-                           booking-drag="{reservationId: '{{booking._id}}',resourceId: '{{hytte._id}}'}"
-                           booking-resize="{reservationId : '{{booking._id}}'}">
-                             <div class="bookingstimeline-block-text">
-                                 {{booking.name}}:{{timeline.daysBetween(booking.start,booking.end)}}
-                             </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  <!--</div>-->
-  <br/>
-  <br/>
-  <br/>
-  <!--<div ng-controller="ModalBookCtrl">-->
-      <div>
-      <script type="text/ng-template" id="changeBookingDialog">
-          <div class="modal-header">
-              <h3>New reservation</h3>
-          </div>
-          <div ng-if="newBookingError">
-              <div class="error">
-                  {{newBookingError}}
-              </div>
-          </div>
+<body>
+<div id="root-timeline" ng-controller="TimelineCtrl as timeline" style="width: 1053px;">
+    <div class="timeline-content" ng-style="{height:'{{timelineData.length*60}}px'}">
+        <div class="resource-header">
+            <div class="resource-header-item" ng-repeat="resource in timelineData">
+                <div class="resource-header-item-name">
+                    {{resource.name}}
+                </div>
+            </div>
+        </div>
+        <div class="timeline-slide-container">
+            <div class="timeline-header">
+                <div class="timeline-header-months">
+                    <div class="timeline-header-month"
+                         ng-repeat="headerMonth in timeline.headerMonths"
+                         ng-style="{width:'{{headerMonth.widthOfMonth}}px'}">
+                        {{headerMonth.monthWithYear}}
+                    </div>
+                </div>
+                <div class="timeline-header-days">
+                    <div class="timeline-header-day" ng-repeat="dayOfMonth in timeline.daysOfMonths">
+                        {{dayOfMonth.day}}
+                    </div>
+                </div>
+            </div>
+            <div class="timeline-grid">
+                <div class="timeline-grid-row" ng-repeat="resource in timelineData">
+                    <div class="timeline-grid-row-cell"
+                         ng-bind="dayOfMonth"
+                         ng-repeat="dayOfMonth in timeline.daysOfMonths"
+                         ng-class="{dayWeekend : dayOfMonth.isWeekend}"
+                         reservation-slide-new>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline-blocks">
+                <div class="timeline-block-container" ng-repeat="resource in timelineData">
+                    <div class="timeline-block"
+                         ng-repeat="reservation in resource.series"
+                         ng-style="{left:'{{timeline.daysBetween(timeline.startDate,reservation.start) * 21 + 3}}px',width:'{{timeline.daysBetween(reservation.start,reservation.end)*21-9}}px'}"
+                         reservation-drag="{reservationId: '{{reservation._id}}',resourceId: '{{resource._id}}'}"
+                         reservation-resize="{reservationId : '{{reservation._id}}'}">
+                        <div class="timeline-block-text">
+                            {{reservation.name}}:{{timeline.daysBetween(reservation.start,reservation.end)}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
 
 
-          <div class="modal-body">
-              <label for="name">Navn:</label>
-              <input type="text" id="name" ng-model="bookingForm.name" autofocus>
-          </div>
-          <div class="modal-footer">
-              <button class="btn btn-primary" ng-click="ok()">OK</button>
-              <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-          </div>
-      </script>
+    <div>
+        <script type="text/ng-template" id="newReservationDialog">
+            <div class="modal-header">
+                <h3>New reservation</h3>
+            </div>
+            <div ng-if="newReservationError">
+                <div class="error">
+                    {{newReservationError}}
+                </div>
+            </div>
 
-  <!--    <button class="btn" ng-click="open()">Open me!</button>
-      <div ng-show="selected">Selection from a modal: {{ selected }}</div>-->
-  </div>
-  </div>
-  </body>
+            <div class="modal-body">
+                <label for="name">Navn:</label>
+                <input type="text" id="name" ng-model="newReservationForm.name" autofocus>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="ok()">OK</button>
+                <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+    </div>
+</div>
+</body>
 </html>

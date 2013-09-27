@@ -2,11 +2,11 @@
 
 var directives=angular.module('reservationApp.directives', []);
 
-directives.directive('bookingDrag', function (bookingHelper) {
+directives.directive('reservationDrag', function (reservationHelper) {
     return {
         restrict: 'A',
         link: function (scope, elm, attrs) {
-            var options = scope.$eval(attrs.bookingDrag);
+            var options = scope.$eval(attrs.reservationDrag);
             elm.draggable({
                 axis: "x",
                 grid: [cellWidth, cellWidth],
@@ -16,10 +16,10 @@ directives.directive('bookingDrag', function (bookingHelper) {
                 },
                 stop: function () {
                     var block = jQuery(this);
-                    var newStart = bookingHelper.gridCellToDate(block, scope);
+                    var newStart = reservationHelper.gridCellToDate(block, scope);
                     block.zIndex(block.zIndex() - 1);
-                    console.log("bookingid:" + options.reservationId +",resourceId:"+options.resourceId+ ", newStart:" + newStart);
-                    bookingHelper.setNewStart(options.reservationId,options.resourceId,newStart)
+                    console.log("resid:" + options.reservationId +",resourceId:"+options.resourceId+ ", newStart:" + newStart);
+                    reservationHelper.setNewStart(options.reservationId,options.resourceId,newStart)
                         .then(function(result){
                             console.log("done!");
                         });
@@ -29,7 +29,7 @@ directives.directive('bookingDrag', function (bookingHelper) {
         }
     };
 })
-    .directive('bookingSlideNew', function (bookingHelper) {
+    .directive('reservationSlideNew', function (reservationHelper) {
         var slideStart;
         var index;
         return{
@@ -48,7 +48,7 @@ directives.directive('bookingDrag', function (bookingHelper) {
                         gridCell.addClass("selectClass");
                         slideCells.push(gridCell);
                         index=gridCell.parent().index();
-                        slideStart  = bookingHelper.gridCellToDate(gridCell, scope);
+                        slideStart  = reservationHelper.gridCellToDate(gridCell, scope);
                     }
                 });
                 e.bind('mouseup', function (event) {
@@ -57,7 +57,7 @@ directives.directive('bookingDrag', function (bookingHelper) {
                         for (var i = 0; i < slideCells.length; i++) {
                             slideCells[i].removeClass("selectClass");
                         }
-                        var slideEnd = bookingHelper.gridCellToDate(jQuery(this), scope);
+                        var slideEnd = reservationHelper.gridCellToDate(jQuery(this), scope);
                         if(slideStart.equals(slideEnd))
                             slideEnd.add(1).days();
                         console.log(slideEnd.compareTo(slideStart));
@@ -67,27 +67,28 @@ directives.directive('bookingDrag', function (bookingHelper) {
                             slideEnd=temp;
                         }
                         console.log("slideStart:"+slideStart.toString("yyyy-MM-dd")+" -- " + slideEnd.toString("yyyy-MM-dd"));
-                        scope.openNewBookingDialog(index, slideStart.toString("yyyy-MM-dd"), slideEnd.toString("yyyy-MM-dd"));
+                        scope.openNewReservationDialog(index, slideStart.toString("yyyy-MM-dd"), slideEnd.toString("yyyy-MM-dd"));
                         //scope.$apply();
                     }
                 });
             }
         }
     })
-    .directive('bookingResize', function (bookingHelper) {
+    .directive('reservationResize', function (reservationHelper) {
         return {
             restrict: 'A',
             link: function (scope, elm, attrs) {
-                var options = scope.$eval(attrs.bookingDrag);
+                var options = scope.$eval(attrs.reservationResize);
+                //console.dir(options);
                 elm.resizable({
                     handles: "e,w",
                     grid: cellWidth,
                     stop: function () {
                         var block = jQuery(this);
-                        var newStart = bookingHelper.gridCellToDate(block, scope);
+                        var newStart = reservationHelper.gridCellToDate(block, scope);
                         var width = block.outerWidth();
                         var numberOfDays = Math.round(width / cellWidth);
-                        console.log("numberOfDays:" + numberOfDays + ",bookingid:" + options.bookingid + ", newStart:" + newStart);
+                        console.log("numberOfDays:" + numberOfDays + ",resid:" + options.reservationId+ ", newStart:" + newStart);
                         alert("Not implemented on the server yet!");
                     }
                 });
