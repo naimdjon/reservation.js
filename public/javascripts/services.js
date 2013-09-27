@@ -47,14 +47,12 @@ services.factory('reservationService', function ($http,$location) {
     };
 
     var daysBetween = function (startDate, endDate) {
-            if (!startDate || !endDate) {
+            if (!startDate || !endDate)
                 return 0;
-            }
             var start= Date.parse(startDate,'yyyy-MM-dd');
             var end = Date.parse(endDate, 'yyyy-MM-dd');
-            if (start.getYear() == 1901 || end.getYear() == 8099) {
+            if (start.getYear() == 1901 || end.getYear() == 8099)
                 return 0;
-            }
             var count = 0, date = start.clone();
             while (date.compareTo(end) == -1) {
                 count = count + 1;
