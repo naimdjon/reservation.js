@@ -40,7 +40,7 @@ controllers.controller("TimelineCtrl", function ($scope,$modal, $http, reservati
 
 
 var ModalInstanceCtrl = function ($scope, $modalInstance,reservationService,newReservationForm) {
-  $scope.newReservation = newReservationForm;
+  $scope.newReservationForm = newReservationForm;
   $scope.ok = function () {
       reservationService.reserveUnit(newReservationForm.name,newReservationForm.index, newReservationForm.start, newReservationForm.end)
           .then(function(result){
