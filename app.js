@@ -1,13 +1,24 @@
-
-/**
- * Module dependencies.
- */
-
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
+var timelineData = require('./routes/timelineData');
 var http = require('http');
 var path = require('path');
+
+collectionName='reservations';
+dbURL='mongodb://127.0.0.1:27017/book';
+
+MongoClient = require('mongodb').MongoClient
+    , format = require('util').format
+    , ObjectID = require('mongodb').ObjectID;
+
+
+/*needed for correct date formatting during serialization*/
+Date.prototype.toJSON = function (key) {
+    return this.getFullYear()   + '-' + (parseInt(this.getMonth()) +1) +  '-' +this.getDate();
+};
+
+
 
 var app = express();
 
@@ -31,7 +42,8 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/timelineData', timelineData.timelineData);
+/*app.get('/users', user.list);*/
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
