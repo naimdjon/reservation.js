@@ -28,8 +28,7 @@ controllers.controller("TimelineCtrl", function ($scope,$modal, $http, reservati
         }
     });
 
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
+    modalInstance.result.then(function (x) {
     }, function () {
       console.log('Modal dismissed at: ' + new Date()+"...");
     });
@@ -42,7 +41,7 @@ controllers.controller("TimelineCtrl", function ($scope,$modal, $http, reservati
 var ModalInstanceCtrl = function ($scope, $modalInstance,reservationService,newReservationForm) {
   $scope.newReservationForm = newReservationForm;
   $scope.ok = function () {
-      reservationService.reserveUnit(newReservationForm.name,newReservationForm.index, newReservationForm.start, newReservationForm.end)
+      reservationService.reserveUnit(newReservationForm)
           .then(function(result){
               if(result && (result["error"] && result["error"].length>0)) {
                   $scope.newReservationError=result["error"];

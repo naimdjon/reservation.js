@@ -46,6 +46,7 @@ services.factory('reservationService', function ($http,$location) {
         return headerMonths;
     };
 
+
     var daysBetween = function (startDate, endDate) {
             if (!startDate || !endDate)
                 return 0;
@@ -72,19 +73,8 @@ services.factory('reservationService', function ($http,$location) {
     };
 
 
-
-
-    var getResourceIdFromIndex = function (index) {
-        return timelineData[index]._id;
-    };
-
-
-
-
-
     var setNewStart = function (reservationId,resourceId,newStart) {
-        var result;
-        var promise=$http.post(urlPath+'/setNewStart', JSON.stringify({reservationId:reservationId,resourceId:resourceId,newStart:newStart}))
+        var promise=$http.post(urlPath+'/setNewStartDate', JSON.stringify({reservationId:reservationId,resourceId:resourceId,newStart:newStart}))
             .then(function(res){
                 return  res.data;
             });
@@ -92,11 +82,11 @@ services.factory('reservationService', function ($http,$location) {
     };
 
 
-
-
-    var reserveUnit = function (reservationOnName,index, start, end) {
+    var reserveUnit = function (newReservationForm) {
+        var reservationOnName=newReservationForm.name,index=newReservationForm.index, start=newReservationForm.start, end=newReservationForm.end;
         var result;
-        var promise=$http.post(urlPath+'/newReservation', JSON.stringify({reservationOnName:reservationOnName,resourceId:getResourceIdFromIndex(index),start:start,end:end}))
+        var resourceId = timelineData[index]._id;
+        var promise=$http.post(urlPath+'/newReservation', JSON.stringify({reservationOnName:reservationOnName,resourceId: resourceId,start:start,end:end}))
             .then(function(res){
                 result = res.data;
                 if(result && (!result["error"] || !result["error"].length>0))
@@ -106,13 +96,10 @@ services.factory('reservationService', function ($http,$location) {
         return promise;
     };
 
-
-
     return {
         getTimelineData:  getTimelineData,
         reserveUnit: reserveUnit,
         setNewStart: setNewStart,
-        getResourceIdFromIndex: getResourceIdFromIndex,
         getDaysOfMonths: getDaysOfMonths,
         getHeaderMonths: getHeaderMonths,
         daysBetween: daysBetween,

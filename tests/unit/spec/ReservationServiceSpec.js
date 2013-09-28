@@ -3,6 +3,7 @@
 describe('ReservationService', function () {
     beforeEach(module('reservationApp.services'));
 
+
     describe('definition', function () {
         it('should be defined', inject(function (reservationService) {
             expect(reservationService).toBeDefined();
@@ -10,47 +11,52 @@ describe('ReservationService', function () {
     });
 
     describe('getDaysOfMonths', function () {
-        it('should return 5 days between today  and 5 days from now', inject(function (reservationService) {
-            var dayOfMonth = reservationService.getDaysOfMonths(Date.today(), Date.today().add(5).days());
-            expect(dayOfMonth.length).toBe(5);
+        var startDate,endDate;
+        var dayOfMonth;
+        beforeEach(inject(function (reservationService) {
+            startDate=Date.today().set({day: 1,month:8,year:2013});
+            endDate=startDate.clone().add(8).days();
+            dayOfMonth=reservationService.getDaysOfMonths(startDate,endDate);
         }));
 
-        it('should return correct day', inject(function (reservationService) {
-            var dayOfMonth = reservationService.getDaysOfMonths(Date.today(), Date.today().add(5).days());
-            expect(Date.today().toString('dd')).toEqual(dayOfMonth[0].day);
-        }));
+        it('should return 8 days between today  and 8 days from now', function() {
+            expect(dayOfMonth.length).toBe(8);
+        });
 
-        it('should return correct month header for the timeline', inject(function (reservationService) {
-            var dayOfMonth = reservationService.getDaysOfMonths(Date.today(), Date.today().add(5).days());
-            expect(Date.today().toString('MMM/yyyy')).toEqual(dayOfMonth[0].month);
-        }));
+        it('should return correct day', function() {
+            expect(dayOfMonth[0].day).toEqual('01');
+        });
 
-        it('should return correct year', inject(function (reservationService) {
-            var dayOfMonth = reservationService.getDaysOfMonths(Date.today(), Date.today().add(5).days());
-            expect(Date.today().toString('yyyy')).toEqual(dayOfMonth[0].year);
-        }));
+        it('should return correct month header for the timeline', function() {
+            expect(dayOfMonth[0].month).toEqual('Sep/2013');
+        });
 
-        it('should flag weekends', inject(function (reservationService) {
-            var dayOfMonth = reservationService.getDaysOfMonths(Date.monday(), Date.today().next().sunday());
-            expect(dayOfMonth[5].isWeekend).toBe(true);
-        }));
+        it('should return correct year', function() {
+            expect(dayOfMonth[0].year).toEqual('2013');
+        });
+
+        it('should flag "7.09.2013" as a weekend', function(){
+            expect(dayOfMonth[7].isWeekend).toBe(true);
+        });
     });
 
     describe('getHeaderMonths', function () {
-        it('should return 5 headerMonths from current month and 5 months from now', inject(function (reservationService) {
-            var headerMonths = reservationService.getHeaderMonths(Date.today(), Date.today().add(5).months());
-            expect(headerMonths.length).toBe(5);
+        var headerMonths;
+        beforeEach(inject(function (reservationService) {
+            var startDate=Date.today().set({day: 1,month:8,year:2013});
+            headerMonths = reservationService.getHeaderMonths(startDate, startDate.clone().add(5).months());
         }));
 
-        it('should return correct month with year formatting', inject(function (reservationService) {
-            var headerMonth = reservationService.getHeaderMonths(Date.today(), Date.today().add(5).days());
-            expect(headerMonth[0].monthWithYear).toBe(Date.today().toString("MMM/yyyy"));
-        }));
+        it('should return 5 headerMonths from current month and 5 months from now', function() {
+            expect(headerMonths.length).toBe(5);
+        });
+
+        it('should return correct month with year formatting', function() {
+            expect(headerMonths[0].monthWithYear).toBe('Sep/2013');
+        });
 
         it('should calculate width for the monthWithYear header correctly', inject(function (reservationService) {
-            var start=Date.today().set({day: 1,month:8,year:2013});
-            var headerMonth = reservationService.getHeaderMonths(start, start.clone().add(5).days());
-            expect(headerMonth[0].widthOfMonth).toBe(629);/*30*21-1*/
+            expect(headerMonths[0].widthOfMonth).toBe(629);/*(30*21)-1*/
         }));
     });
 
@@ -73,6 +79,7 @@ describe('ReservationService', function () {
         }));
 
     });
+
 });
 
 

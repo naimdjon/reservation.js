@@ -1,7 +1,9 @@
 var express = require('express');
+var moment = require('moment');
 var routes = require('./routes');
 var timelineData = require('./routes/timelineData');
 var newReservation = require('./routes/newReservation');
+var setNewStartDate = require('./routes/setNewStartDate');
 var http = require('http');
 var path = require('path');
 
@@ -44,6 +46,7 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/timelineData', timelineData.timelineData);
 app.post('/newReservation', newReservation.newReservation);
+app.post('/setNewStartDate', setNewStartDate.setNewStartDate);
 
 
 http.createServer(app).listen(app.get('port'), function(){
