@@ -18,7 +18,7 @@ directives.directive('reservationDrag', function (reservationService) {
                     var block = jQuery(this);
                     var newStart = reservationService.gridCellToDate(block, scope);
                     block.zIndex(block.zIndex() - 1);
-                    console.log("resid:" + options.reservationId +",resourceId:"+options.resourceId+ ", newStart:" + newStart);
+                    //console.log("resid:" + options.reservationId +",resourceId:"+options.resourceId+ ", newStart:" + newStart);
                     reservationService.setNewStart(options.reservationId,options.resourceId,newStart)
                         .then(function(result){
                             console.log("done!");
