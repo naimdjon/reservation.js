@@ -1,5 +1,4 @@
 var express = require('express');
-var moment = require('moment');
 var routes = require('./routes');
 var timelineData = require('./routes/timelineData');
 var newReservation = require('./routes/newReservation');
@@ -7,8 +6,8 @@ var setNewStartDate = require('./routes/setNewStartDate');
 var http = require('http');
 var path = require('path');
 
-collectionName='reservations';
-dbURL='mongodb://127.0.0.1:27017/book';
+collectionName='resourcereservations';
+dbURL='mongodb://127.0.0.1:27017/'+collectionName;
 
 MongoClient = require('mongodb').MongoClient
     , format = require('util').format

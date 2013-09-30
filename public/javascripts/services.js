@@ -3,7 +3,7 @@
 var services = angular.module('reservationApp.services', []);
 
 services.factory('reservationService', function ($http,$location) {
-    var urlPath=$location.path();
+    var urlPath=$location.path() || 'http://localhost:8000';
     var timelineData;
 
     var getTimelineData=function(){
@@ -39,7 +39,7 @@ services.factory('reservationService', function ($http,$location) {
             var headerMonth = []
             headerMonth.monthWithYear = counterDate.toString("MMM/yyyy");
             headerMonth.daysInMonth = Date.getDaysInMonth(counterDate.getFullYear(), counterDate.getMonth());
-            headerMonth.widthOfMonth = (headerMonth.daysInMonth * cellWidth) - 1;
+            headerMonth.widthOfMonth = (headerMonth.daysInMonth * cellWidth)-1;
             headerMonths.push(headerMonth);
             counterDate.add(1).months();
         }
@@ -89,8 +89,9 @@ services.factory('reservationService', function ($http,$location) {
         var promise=$http.post(urlPath+'/newReservation', JSON.stringify({reservationOnName:reservationOnName,resourceId: resourceId,start:start,end:end}))
             .then(function(res){
                 result = res.data;
-                if(result && (!result["error"] || !result["error"].length>0))
-                    timelineData[index].series.push({id: 100, name: reservationOnName, start: start, end: end});
+                console.log(result["newReservationId"]);
+                if(result && result["newReservationId"] && result["newReservationId"].length>0)
+                    timelineData[index].reservations.push({_id: result["newReservationId"], name: reservationOnName, start: start, end: end});
                 return result;
             });
         return promise;

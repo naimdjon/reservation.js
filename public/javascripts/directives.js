@@ -21,7 +21,7 @@ directives.directive('reservationDrag', function (reservationService) {
                     //console.log("resid:" + options.reservationId +",resourceId:"+options.resourceId+ ", newStart:" + newStart);
                     reservationService.setNewStart(options.reservationId,options.resourceId,newStart)
                         .then(function(result){
-                            console.log("done!");
+                            console.log("stoppped!");
                         });
 
                 }

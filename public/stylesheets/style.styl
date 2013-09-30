@@ -1,3 +1,5 @@
+slider-width=7665px
+
 body
   padding: 40px
   font-family: tahoma, verdana, helvetica, serif
@@ -61,16 +63,18 @@ div.resource-header-item
 	overflow: hidden
 
 
-div.resource-header-item-name 
+div.resource-header-item-name.last
+    border-bottom: 0px solid #f0f0f0
+
+div.resource-header-item-name
     width: 140px
     padding-left: 5px
     padding-right: 5px
     padding-top: 10px
     border-top: 1px solid #f0f0f0
-    border-bottom: 1px solid #f0f0f0
     line-height: 10px
     height: 21px
-    margin-top:1px
+    margin-top:0px
 
 
 div.timeline-slide-container 
@@ -130,8 +134,7 @@ div.timeline-block div.ui-resizable-handle.ui-resizable-s
 
 
 .timeline-header-months, .timeline-header-days, .timeline-grid, .timeline-grid-row
-    width: 7665px
-
+    width: slider-width
 
 div.modalDialog
     width: 250px

@@ -1,4 +1,4 @@
-
+var moment = require('moment');
 exports.setNewStartDate = function(req, res){
     console.dir(req.body);
     var reservationId = req.body.reservationId;
@@ -7,7 +7,7 @@ exports.setNewStartDate = function(req, res){
     MongoClient.connect(dbURL, function(err, db) {
         if(err) throw err;
         db.collection(collectionName).update(
-            {"series._id":ObjectID(reservationId)}, { $set:{"series.$.start":toDate(newStart),"series.$.end":toDate(newEnd)}},function(err, result){
+            {"reservations._id":ObjectID(reservationId)}, { $set:{"reservations.$.start":toDate(newStart),"reservations.$.end":toDate(newEnd)}},function(err, result){
                 console.log("err:"+err);
                 console.log("result:"+result);
                 res.writeHead(200, { 'Content-Type': 'application/json','Access-Control-Allow-Origin': '*'  });
@@ -19,3 +19,12 @@ exports.setNewStartDate = function(req, res){
         });
     });
 };
+
+
+function getEndDate(startDate,numberOfDays){
+    return moment(startDate).add('days',numberOfDays);
+}
+
+function toDate(momentDate){
+    return new Date(momentDate.year(),momentDate.month(),momentDate.date());
+}

@@ -43,7 +43,8 @@
                     </div>
                 </div>
                 <div class="timeline-header-days">
-                    <div class="timeline-header-day" ng-repeat="dayOfMonth in timeline.daysOfMonths">
+                    <div class="timeline-header-day"
+                         ng-repeat="dayOfMonth in timeline.daysOfMonths">
                         {{dayOfMonth.day}}
                     </div>
                 </div>
@@ -58,10 +59,11 @@
                     </div>
                 </div>
             </div>
+            <!--BLOCKS: Reservations-->
             <div class="timeline-blocks">
                 <div class="timeline-block-container" ng-repeat="resource in timelineData">
                     <div class="timeline-block"
-                         ng-repeat="reservation in resource.series"
+                         ng-repeat="reservation in resource.reservations"
                          ng-style="{left:'{{timeline.daysBetween(timeline.startDate,reservation.start) * 21 + 3}}px',width:'{{timeline.daysBetween(reservation.start,reservation.end)*21-9}}px'}"
                          reservation-drag="{reservationId: '{{reservation._id}}',resourceId: '{{resource._id}}'}"
                          reservation-resize="{reservationId : '{{reservation._id}}'}">
