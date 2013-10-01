@@ -86,7 +86,7 @@ services.factory('reservationService', function ($http,$location) {
         var reservationOnName=newReservationForm.name,index=newReservationForm.index, start=newReservationForm.start, end=newReservationForm.end;
         var result;
         var resourceId = timelineData[index]._id;
-        var promise=$http.post(urlPath+'/newReservation', JSON.stringify({reservationOnName:reservationOnName,resourceId: resourceId,start:start,end:end}))
+        var promise=$http.post('/newReservation', JSON.stringify({reservationOnName:reservationOnName,resourceId: resourceId,start:start,end:end}))
             .then(function(res){
                 result = res.data;
                 console.log(result["newReservationId"]);
