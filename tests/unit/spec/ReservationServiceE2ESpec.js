@@ -7,7 +7,7 @@ describe('', function () {
 
     beforeEach(inject(function ($injector) {
         $httpBackend = $injector.get('$httpBackend');
-        $httpBackend.when('GET', 'http://localhost:8000/timelineData').respond(
+        $httpBackend.when('GET', '/timelineData').respond(
             [
                 {
                     _id: 25,
