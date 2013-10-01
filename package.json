@@ -14,5 +14,9 @@
   },
   "scripts": {
     "start": "node server.js"
-    }
+  },
+  "repository": {
+      "type" : "git",
+      "url" : "http://github.com/naimdjon/reservation.js"
+  }
 }
