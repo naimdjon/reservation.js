@@ -3,7 +3,7 @@
 var services = angular.module('reservationApp.services', []);
 
 services.factory('reservationService', function ($http,$location) {
-    var urlPath=$location.path() || 'http://localhost:8000';
+    var urlPath=$location.path();// || 'http://localhost:8000';
     var timelineData;
 
     var getTimelineData=function(){
