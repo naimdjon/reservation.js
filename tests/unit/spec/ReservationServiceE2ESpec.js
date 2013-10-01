@@ -41,7 +41,6 @@ describe('', function () {
             expect(timelineData).toBeDefined();
         }));
     });
-
     describe('reserveUnit', function () {
         it('should send data to the server for reservation', inject(function (reservationService) {
             reservationService.getTimelineData().then(function(data){
@@ -56,6 +55,18 @@ describe('', function () {
             $httpBackend.flush();
             expect(resultMessage).toEqual("CheckError");
         }));
+    });
+
+    describe('reservationDrag', function () {
+        it('should get the correct enddate given a newStartDate', function () {
+            var endDate = getEndDateFromStartDate(moment('20130902','YYYYMMDD'), 2);
+            expect(endDate.format('DD.MM.YYYY')).toEqual('04.09.2013');
+        });
+
+        it('should get the correct numberOfDays between start and end when hcaning the start date', function () {
+            var diff = diffDates(moment('20130902'), moment('20130910'));
+            expect(8).toEqual(diff);
+        });
     });
 
 });
