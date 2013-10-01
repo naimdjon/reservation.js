@@ -7,18 +7,11 @@ var http = require('http');
 var path = require('path');
 
 collectionName='resourcereservations';
-dbURL='mongodb://127.0.0.1:27017/'+collectionName;
+dbURL = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL ||
+    ('mongodb://naimdjon:r3s3rvation.js@ds047468.mongolab.com:47468/heroku_app18425228');
+//var dbURL='mongodb://127.0.0.1:27017/'+collectionName;
 
-MongoClient = require('mongodb').MongoClient
-    , format = require('util').format
-    , ObjectID = require('mongodb').ObjectID;
-
-
-/*needed for correct date formatting during serialization*/
-Date.prototype.toJSON = function (key) {
-    return this.getFullYear()   + '-' + (parseInt(this.getMonth()) +1) +  '-' +this.getDate();
-};
-
+MongoClient = require('mongodb').MongoClient, format = require('util').format, ObjectID = require('mongodb').ObjectID;
 
 
 var app = express();
