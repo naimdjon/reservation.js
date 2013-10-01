@@ -16,13 +16,16 @@ directives.directive('reservationDrag', function (reservationService) {
                 },
                 stop: function () {
                     var block = jQuery(this);
-                    var newStart = reservationService.gridCellToDate(block, scope);
+                    var newStart = reservationService.gridCellToStartDate(block, scope);
+                    var diff = options.diff;
+                    var newEnd = newStart.clone().add(parseInt(diff)).days();
                     block.zIndex(block.zIndex() - 1);
-                    //console.log("resid:" + options.reservationId +",resourceId:"+options.resourceId+ ", newStart:" + newStart);
-                    reservationService.setNewStart(options.reservationId,options.resourceId,newStart)
+                    //console.log("newEnd:"+newEnd+",diff:"+diff);
+                    //console.log("diff:"+diff+"resid:" + options.  +",resourceId:"+options.resourceId+ ", newStart:" + newStart);
+                    reservationService.reservationDrag(options.reservationId,options.resourceId,newStart,newEnd)
                         .then(function(result){
                             console.log("stoppped!");
-                        });
+                    });
 
                 }
             });
@@ -48,7 +51,7 @@ directives.directive('reservationDrag', function (reservationService) {
                         gridCell.addClass("selectClass");
                         slideCells.push(gridCell);
                         index=gridCell.parent().index();
-                        slideStart  = reservationService.gridCellToDate(gridCell, scope);
+                        slideStart  = reservationService.gridCellToStartDate(gridCell, scope);
                     }
                 });
                 e.bind('mouseup', function (event) {
@@ -57,16 +60,16 @@ directives.directive('reservationDrag', function (reservationService) {
                         for (var i = 0; i < slideCells.length; i++) {
                             slideCells[i].removeClass("selectClass");
                         }
-                        var slideEnd = reservationService.gridCellToDate(jQuery(this), scope);
+                        var slideEnd = reservationService.gridCellToStartDate(jQuery(this), scope);
                         if(slideStart.equals(slideEnd))
                             slideEnd.add(1).days();
-                        console.log(slideEnd.compareTo(slideStart));
+                        //console.log(slideEnd.compareTo(slideStart));
                         if(slideEnd.compareTo(slideStart)<0){
                             var temp=slideStart;
                             slideStart=slideEnd;
                             slideEnd=temp;
                         }
-                        console.log("slideStart:"+slideStart.toString("yyyy-MM-dd")+" -- " + slideEnd.toString("yyyy-MM-dd"));
+                        //console.log("slideStart:"+slideStart.toString("yyyy-MM-dd")+" -- " + slideEnd.toString("yyyy-MM-dd"));
                         scope.openNewReservationDialog(index, slideStart.toString("yyyy-MM-dd"), slideEnd.toString("yyyy-MM-dd"));
                         //scope.$apply();
                     }
@@ -83,13 +86,19 @@ directives.directive('reservationDrag', function (reservationService) {
                 elm.resizable({
                     handles: "e,w",
                     grid: cellWidth,
-                    stop: function () {
+                    stop: function (e,ui) {
+                        var newDays=ui.size.width/cellWidth;
                         var block = jQuery(this);
-                        var newStart = reservationService.gridCellToDate(block, scope);
+                        var newStart = reservationService.gridCellToStartDate(block, scope);
+                        var newEnd = newStart.clone().add(newDays).days();//reservationService.gridCellToEndDate(block, scope);
                         var width = block.outerWidth();
                         var numberOfDays = Math.round(width / cellWidth);
-                        console.log("numberOfDays:" + numberOfDays + ",resid:" + options.reservationId+ ", newStart:" + newStart);
-                        alert("Not implemented on the server yet!");
+                        //console.log("numberOfDays:" + numberOfDays + ",resid:" + options.reservationId+ ", newStart:" + newStart, newEnd );
+                        //alert("Not implemented on the server yet!");
+                        reservationService.reservationResize(options.reservationId,options.resourceId,newStart,newEnd)
+                            .then(function(result){
+                                console.log("resized:"+result);
+                        });
                     }
                 });
             }

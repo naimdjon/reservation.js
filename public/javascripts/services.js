@@ -63,18 +63,31 @@ services.factory('reservationService', function ($http,$location) {
         };
 
 
-    var gridCellToDate = function (gridCell, scope) {
+    var gridCellToStartDate = function (gridCell, scope) {
         var container = gridCell.parent();
         var scroll = container.scrollLeft();
         var offset = gridCell.offset().left - container.offset().left - 1 + scroll;
         var daysFromStart = Math.round(offset / cellWidth);
+        /*console.log("daysFromStart:"+daysFromStart);
+        console.log("scope.startDate:"+scope.startDate+", type:"+typeof(scope.startDate));*/
         var date = scope.startDate.clone().addDays(daysFromStart);
+        //console.log("newdate:"+date+", type:"+typeof(date));
         return date;
     };
 
 
-    var setNewStart = function (reservationId,resourceId,newStart) {
-        var promise=$http.post(urlPath+'/setNewStartDate', JSON.stringify({reservationId:reservationId,resourceId:resourceId,newStart:newStart}))
+
+    var reservationDrag = function (reservationId,resourceId,newStart,newEnd) {
+        console.log("timelineData:"+timelineData[0].reservations);
+        var promise=$http.post(urlPath+'/reservationMove', JSON.stringify({reservationId:reservationId,resourceId:resourceId,newStart:newStart,newEnd:newEnd}))
+            .then(function(res){
+                return  res.data;
+            });
+        return promise;
+    };
+
+    var reservationResize = function (reservationId,resourceId,newStart,newEnd) {
+        var promise=$http.post(urlPath+'/reservationChangeDates', JSON.stringify({reservationId:reservationId,resourceId:resourceId,newStart:newStart,newEnd:newEnd}))
             .then(function(res){
                 return  res.data;
             });
@@ -100,10 +113,11 @@ services.factory('reservationService', function ($http,$location) {
     return {
         getTimelineData:  getTimelineData,
         reserveUnit: reserveUnit,
-        setNewStart: setNewStart,
+        reservationDrag: reservationDrag,
+        reservationResize: reservationResize,
         getDaysOfMonths: getDaysOfMonths,
         getHeaderMonths: getHeaderMonths,
         daysBetween: daysBetween,
-        gridCellToDate: gridCellToDate
+        gridCellToStartDate: gridCellToStartDate
     };
 });

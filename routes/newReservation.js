@@ -23,7 +23,8 @@ exports.newReservation = function(req, res){
         if(err) throw err;
         var newReservationId;
         db.collection(collectionName).update(
-            {_id:ObjectID(resourceId)}, { $push:{reservations:{_id: (newReservationId = ObjectID()),name:reservationOnName,start:new Date(start),end:new Date(end)}} },function(err, result){
+            {_id:ObjectID(resourceId)}, { $push:{reservations:{_id: (newReservationId = ObjectID()),name:reservationOnName,start:new Date(start),end:new Date(end)}} }
+            ,function(err, result){
                 res.writeHead(200, { 'Content-Type': 'application/json','Access-Control-Allow-Origin': '*'  });
                 if(parseInt(result)!=1)
                     res.end(JSON.stringify({"error":"Could not insert the reservation:"+result}),500);

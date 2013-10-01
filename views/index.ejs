@@ -65,7 +65,7 @@
                     <div class="timeline-block"
                          ng-repeat="reservation in resource.reservations"
                          ng-style="{left:'{{timeline.daysBetween(timeline.startDate,reservation.start) * 21 + 3}}px',width:'{{timeline.daysBetween(reservation.start,reservation.end)*21-9}}px'}"
-                         reservation-drag="{reservationId: '{{reservation._id}}',resourceId: '{{resource._id}}'}"
+                         reservation-drag="{reservationId: '{{reservation._id}}',resourceId: '{{resource._id}}',diff: '{{timeline.daysBetween(reservation.start,reservation.end)}}'}"
                          reservation-resize="{reservationId : '{{reservation._id}}'}">
                         <div class="timeline-block-text">
                             {{reservation.name}}:{{timeline.daysBetween(reservation.start,reservation.end)}}
@@ -92,8 +92,8 @@
             </div>
 
             <div class="modal-body">
-                <label for="name">Navn:</label>
-                <input type="text" id="name" ng-model="newReservationForm.name" autofocus>
+                <label for="name">Name:</label>
+                <input type="text" id="name" ng-model="newReservationForm.name" autofocus/>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" ng-click="ok()">OK</button>
@@ -101,6 +101,11 @@
             </div>
         </script>
     </div>
+</div>
+
+
+<div id="demo" style="text-align:center;margin-top:100px;">
+    <iframe src="//player.vimeo.com/video/75864409" width="500" height="313" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> <p><a href="http://vimeo.com/75864409">Reservation.js demo</a> from <a href="http://vimeo.com/user21436442">Naimdjon</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
 </div>
 </body>
 </html>
