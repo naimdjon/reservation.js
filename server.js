@@ -1,6 +1,7 @@
 var express = require('express');
 var routes = require('./routes');
 var timelineData = require('./routes/timelineData');
+var monthView = require('./routes/monthView');
 var newReservation = require('./routes/newReservation');
 var reservationMove = require('./routes/reservationMove');
 var reservationChangeDates = require('./routes/reservationChangeDates');
@@ -11,7 +12,6 @@ moment = require('moment');
 collectionName='resourcereservations';
 dbURL = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL ||
     ('mongodb://naimdjon:r3s3rvation.js@ds047468.mongolab.com:47468/heroku_app18425228');
-//var dbURL='mongodb://127.0.0.1:27017/'+collectionName;
 
 MongoClient = require('mongodb').MongoClient, format = require('util').format, ObjectID = require('mongodb').ObjectID;
 
@@ -26,7 +26,7 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
-app.use(express.cookieParser('your secret here'));
+app.use(express.cookieParser('r3servation'));
 app.use(express.session());
 app.use(app.router);
 app.use(require('stylus').middleware(__dirname + '/public'));
@@ -38,10 +38,11 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/timelineData', timelineData.timelineData);
-app.post('/newReservation', newReservation.newReservation);
-app.post('/reservationMove', reservationMove.reservationMove);
-app.post('/reservationChangeDates', reservationChangeDates.reservationChangeDates);
+app.get('/timelineData', timelineData.index);
+app.post('/newReservation', newReservation.index);
+app.post('/reservationMove', reservationMove.index);
+app.post('/reservationChangeDates', reservationChangeDates.index);
+app.get('/monthView', monthView.index);
 
 
 http.createServer(app).listen(app.get('port'), function(){

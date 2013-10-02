@@ -1,4 +1,4 @@
-exports.reservationChangeDates = function(req, res){
+exports.index = function(req, res){
     MongoClient.connect(dbURL, function(err, db) {
         if(err) throw err;
         console.dir(req.body);

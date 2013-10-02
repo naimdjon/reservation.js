@@ -4,7 +4,7 @@ Date.prototype.toJSON = function (key) {
     return this.getFullYear()   + '-' + (parseInt(this.getMonth()) +1) +  '-' +this.getDate();
 };
 
-exports.timelineData = function(req, res){
+exports.index = function(req, res){
     MongoClient.connect(dbURL, function(err, db) {
         if(err) throw err;
         var collection = db.collection(collectionName);

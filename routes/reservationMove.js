@@ -1,4 +1,4 @@
-exports.reservationMove = function(req, res){
+exports.index = function(req, res){
     console.dir(req.body);
     var reservationId = req.body.reservationId;
     var resourceId = req.body.resourceId;

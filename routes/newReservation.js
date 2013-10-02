@@ -1,5 +1,5 @@
 
-exports.newReservation = function(req, res){
+exports.index = function(req, res){
     var error="";
     var resourceId = req.body.resourceId;
     var reservationOnName = req.body.reservationOnName;
