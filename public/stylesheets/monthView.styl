@@ -1,0 +1,175 @@
+marg=20px
+heightWeek=50px
+border=#428bca
+gradient=linear-gradient(to bottom, #0088cc, #0044cc)
+fontColor=#0088cc
+
+body
+  font-size: 0.8em
+
+.gradient
+  background-image:gradient
+  color: #fff
+
+.dayBackground
+  background-color: #b9def0
+
+#timeline-month-view-main
+  width: 80%
+  height: 80%
+
+#root
+  margin-left:marg
+  margin-top:marg
+
+/*
+#timeline-month-view-header, #timeline-month-view-days
+  width:776px
+*/
+
+#timeline-month-view-header,.header
+  width:768px
+  border-radius: 3px
+  border-top:1px solid #fff
+  display:inline-block
+  margin-bottom:0px
+  background-image:gradient
+  color:#fff
+  padding:5px;
+  height:20px;
+
+.timeline-month-view-header-day
+  text-align:center
+  display:inline-block
+  width:107px
+  //border-right: 1px solid border
+//  width:14%
+
+
+.timeline-month-view-week-day
+  width:110px
+
+#timeline-month-view-days
+  color:fontColor
+  width:776px
+  border-left: 1px solid border
+  border-right: 1px solid border
+  display:inline-block
+  margin-right:10px
+  margin-top:-7px
+//  width:100%
+
+.timeline-month-view-weeks
+  min-height: heightWeek
+  width:100%
+  display:block
+
+
+.timeline-month-view-week-day
+  display:inline-block;
+  border-right:1px solid border
+  border-bottom:1px solid border
+  height:50px
+  vertical-align:bottom
+  overflow:visible
+  text-align:right
+  cursor:pointer
+
+
+.dayText
+  margin:10px
+  margin-top:0
+  width:90%
+  height:90%
+  background:none
+
+
+
+.toolbar div
+  display:inline-block
+  width:32%
+
+.toolbarLeft button
+  font-weight:bold
+  text-align:center
+
+.toolbarMid
+    font-weight:bold
+
+.toolbarRight
+  text-align:right
+
+.selectClass
+  background-image:gradient
+  background-color:fontColor
+
+.b
+  background-color:blue
+
+.g
+  background-color:green
+
+.r
+  background-color:red
+
+.borderBottom
+  border-bottom: 1px solid border
+
+.borderRight
+  border-right: 1px solid border
+
+.borderLeft
+  border-left: 1px solid border
+
+.borderRadius
+  border-top-left-radius:4px
+  border-top-right-radius:4px
+
+.weekHeader>div
+  padding:0
+
+.weekHeader
+  vertical-align: middle
+
+.height
+  height:50px
+
+
+table
+  border-collapse:collapse
+  width:90%
+  margin:10px
+  margin-left:40px
+
+table, td, th
+  border:1px solid border
+
+th
+  color:#fff
+  text-align: center
+  padding:5px
+
+td
+  padding:20px
+  text-align:right
+  height:40px
+  width: 50px
+  max-width: 50px
+  position: relative
+  overflow: visible
+
+.center
+  text-align:center
+
+.calDay
+  font-size: 18px
+  color:#428bca
+
+.tabMid
+  color:fontColor
+  font-size:18px
+
+.blockX
+  z-index:10000000
+  border-radius:3px
+
