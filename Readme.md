@@ -12,7 +12,7 @@ Dependencies
     express
     moment
     mongodb
-    express
+
 <!--express --sessions --css stylus --ejs reservation.js-->
 
 License
