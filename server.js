@@ -8,10 +8,10 @@ var reservationChangeDates = require('./routes/reservationChangeDates');
 var http = require('http');
 var path = require('path');
 moment = require('moment');
+var config = require('nconf').file({ file: 'config.json' });
 
 collectionName='resourcereservations';
-dbURL = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL ||
-    ('mongodb://naimdjon:r3s3rvation.js@ds047468.mongolab.com:47468/heroku_app18425228');
+dbURL = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL ||(config.get('dbURI'));
 
 MongoClient = require('mongodb').MongoClient, format = require('util').format, ObjectID = require('mongodb').ObjectID;
 
