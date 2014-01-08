@@ -1,6 +1,6 @@
 Reservation.js
 ----------------------
-Reservation.js is a reservation system written completely in Javascript. The front-end is written in AngularJS while for the backend it makes use of node.js and mongodb.
+Reservation.js is a reservation system written entirely in Javascript. The front-end is written in AngularJS while for the backend it makes use of node.js and mongodb.
 
 Demo
 ----
