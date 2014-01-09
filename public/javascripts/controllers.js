@@ -11,25 +11,6 @@ controllers.controller("TimelineCtrl", function ($scope, $modal, $http, reservat
         $scope.timelineData = data;
     });
     $scope.openNewReservationDialog = openNewReservationDialog;
-
-    /*$scope.openNewReservationDialog = function (index, slideStart, slideEnd) {
-        $scope.newReservationForm = {name: "", index: index, start: slideStart, end: slideEnd};
-        var modalInstance = $modal.open({
-            templateUrl: 'newReservationDialog',
-            controller: ModalInstanceCtrl,
-            windowClass: "modalDialog",
-            resolve: {
-                newReservationForm: function () {
-                    return $scope.newReservationForm;
-                }
-            }
-        });
-
-        modalInstance.result.then(function (x) {
-        }, function () {
-            console.log('Modal dismissed at: ' + new Date() + "...");
-        });
-    };*/
 });
 
 var ModalInstanceCtrl = function ($scope, $modalInstance, reservationService, newReservationForm) {
@@ -69,7 +50,6 @@ var openNewReservationDialog = function (index, slideStart, slideEnd,$scope,$mod
 
 controllers.controller("MonthViewCtrl", function ($scope,monthViewService,$cacheFactory,$modal) {
     moment.lang('nb');
-    ///$scope.openNewReservationDialog=openNewReservationDialog;
     var cache = $cacheFactory('monthsBlocks');
     this.start = moment({day: 1});
     this.currentMonth = this.start.format('MMMM / YYYY');
@@ -79,7 +59,6 @@ controllers.controller("MonthViewCtrl", function ($scope,monthViewService,$cache
     this.datesOfMonths=monthViewService.generateMonthViewDays(this.start,$scope);
 
     this.newReservation = function () {
-        //console.log("not implemented [newReservation]");
         openNewReservationDialog(1,'2014-01-10','2014-01-12',$scope,$modal);
     };
     this.changeMonth = function (num) {
