@@ -43,7 +43,7 @@ app.post('/newReservation', newReservation.index);
 app.post('/reservationMove', reservationMove.index);
 app.post('/reservationChangeDates', reservationChangeDates.index);
 app.get('/monthView', monthView.index);
-
+app.get('/monthView/:resourceId', monthView.showResourceMonthView);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

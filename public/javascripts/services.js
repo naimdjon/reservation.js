@@ -5,7 +5,6 @@ var services = angular.module('reservationApp.services', []);
 services.factory('reservationService', function ($http, $location) {
     var urlPath = $location.path();// || 'http://localhost:8000';
     var timelineData;
-
     var getTimelineData = function () {
         //console.log(":::"+timelineData);
         var promise = $http.get(urlPath + '/timelineData')
@@ -130,57 +129,57 @@ function eq(moment1, moment2){
 
 function assignReservationBlocks(timelineData,resourceId,earliestStart,end) {
     var reservationBlocks=[];
-    //console.log("end:"+end.format('DD.MM.YYYY'));
     for(var i in timelineData) {
-        //console.log("xxx:"+timelineData[i]._id);
         if(timelineData[i]._id==resourceId){
             for(var r in timelineData[i].reservations){
-                var res=timelineData[i].reservations[r];
-                var s=moment(res.start);
-                var e=moment(res.end);
+                var reservation=timelineData[i].reservations[r];
+                var s=moment(reservation.start);
+                var e=moment(reservation.end);
                 //console.log("found res:"+s+"("+ s.format('DD.MM')+" --- "+earliestStart.format('DD.MM')+")"+", is before start:"+s.isBefore(earliestStart)+", isafter end:"+s.isAfter(end));
                 if(s.isBefore(earliestStart) || s.isAfter(end) || eq(s,end)
                     || e.isBefore(earliestStart) || e.isBefore(s))
                     continue;
                 if(reservationBlocks[s.date()]==undefined)reservationBlocks[s.date()]=[];
-                reservationBlocks[s.date()].push(res);
+                reservationBlocks[s.date()].push(reservation);
             }
+            break;
         }
     }
     return reservationBlocks;
 
 }
 
-services.factory('monthViewService', function (reservationService) {
+services.factory('monthViewService', function (reservationService,$location) {
+    var path = $location.absUrl();
+    var resourceId=path.substr(path.indexOf("monthView/")+10).replace('/',''); //todo: configure ngRoute for this.
     var generateMonthViewDays = function (start,$scope) {
         var runnerDate = start.clone();
         var startWeek = start.week();
-        var datesOfMonths = [];
-        datesOfMonths[0] = [];
+        var monthViewDays = [];
+        monthViewDays[0] = [];
         var day = runnerDate.day();
         if (day == 0)day = 7;
-        for (var i = 1; i < day; i++)
-            datesOfMonths[0].push({label:'none' + i});
+        for (var d = 1; d < day; d++)
+            monthViewDays[0].push({label:'none' + d});
         var end = runnerDate.clone().add('months', 1);
-        //console.log("reservationBlocks:"+reservationBlocks[0]);
         var indexWeek = 0, previousWeek = startWeek;
         while (runnerDate.isBefore(end)) {
             if (runnerDate.week() != previousWeek) {
                 ++indexWeek;
                 previousWeek = runnerDate.week();
             }
-            if (datesOfMonths[indexWeek] == undefined)datesOfMonths[indexWeek] = [];
+            if (monthViewDays[indexWeek] == undefined)monthViewDays[indexWeek] = [];
             var dateWithBlock={};
             dateWithBlock.label=runnerDate.date();
-            datesOfMonths[indexWeek].push(dateWithBlock);
+            monthViewDays[indexWeek].push(dateWithBlock);
             runnerDate = runnerDate.add('days', 1);
         }
-        var remainingCells = (datesOfMonths[indexWeek - 1].length - datesOfMonths[indexWeek].length)
-        for (var i = 0; i < remainingCells; i++)
-            datesOfMonths[indexWeek].push({label:'none' + i});
+        var remainingCells = (monthViewDays[indexWeek - 1].length - monthViewDays[indexWeek].length);
+        for (var m = 0; m < remainingCells; m++)
+            monthViewDays[indexWeek].push({label:'none' + m});
 
         reservationService.getTimelineData().then(function (data) {
-            var reservationBlocks=assignReservationBlocks(data,"524b53548aa4f388de1c2dda",start,end);
+            var reservationBlocks=assignReservationBlocks(data,resourceId,start,end);
             for (var i=0;i<reservationBlocks.length;i++) {
                if(reservationBlocks[i]==undefined)continue;
                 for(var j=0;j<reservationBlocks[i].length;j++) {
@@ -188,15 +187,27 @@ services.factory('monthViewService', function (reservationService) {
                     var resStart=moment(res.start,'YYYY-MM-DD');
                     var resEnd=moment(res.end,'YYYY-MM-DD');
                     var idxWeek=resStart.week()-startWeek;
-                    if(datesOfMonths[idxWeek][resStart.day()].blocks==undefined)
-                        datesOfMonths[idxWeek][resStart.day()].blocks=[]
-                    datesOfMonths[idxWeek][resStart.day()].blocks.push({name:res.name,span:resEnd.diff(resStart,"days"),tooltip:res.start+","+res.end+", "+res.name+","+res._id});
+                    var day = monthViewDays[idxWeek][resStart.day()];
+                    if(day.blocks==undefined)
+                        day.blocks=[];
+                    day.blocks.push({name:res.name,span:resEnd.diff(resStart,"days"),tooltip:res.start+","+res.end+", "+res.name+","+res._id});
+                    var start=resStart.clone();
+                    while(start.isBefore(resEnd)) {
+                        //console.log('adding: '+idxWeek+", "+start.weekday()+", "+start.format('DMYY'));
+                        monthViewDays[idxWeek][start.weekday()].res=res;
+                        monthViewDays[idxWeek][start.weekday()].isBusy=true;
+                        start.add('d',1);
+                        idxWeek=start.week()-startWeek;
+                        //console.log("idxWeek:"+idxWeek);
+                    }
+                    /*monthViewDays[idxWeek][start.weekday()].isBusy=true;
+                    monthViewDays[idxWeek][start.weekday()].res=res;*/
                 }
             }
         });
-        return datesOfMonths;
+        return monthViewDays;
     };
     return{
-        generateMonthViewDays: generateMonthViewDays
+        generateMonthViewDays: generateMonthViewDays  //api
     }
 });

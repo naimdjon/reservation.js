@@ -1,7 +1,7 @@
 var controllers = angular.module('reservationApp.controllers', []);
 
 controllers.controller("TimelineCtrl", function ($scope, $modal, $http, reservationService) {
-    this.startDate = Date.today().set({day: 1});
+    this.startDate = Date.today().set({day: 1});   //TODO convert to "moment" instead
     $scope.startDate = this.startDate;
     this.endDate = this.startDate.clone().add(1).years();
     this.headerMonths = reservationService.getHeaderMonths(this.startDate, this.endDate);
@@ -10,8 +10,9 @@ controllers.controller("TimelineCtrl", function ($scope, $modal, $http, reservat
     reservationService.getTimelineData().then(function (data) {
         $scope.timelineData = data;
     });
+    $scope.openNewReservationDialog = openNewReservationDialog;
 
-    $scope.openNewReservationDialog = function (index, slideStart, slideEnd) {
+    /*$scope.openNewReservationDialog = function (index, slideStart, slideEnd) {
         $scope.newReservationForm = {name: "", index: index, start: slideStart, end: slideEnd};
         var modalInstance = $modal.open({
             templateUrl: 'newReservationDialog',
@@ -28,9 +29,8 @@ controllers.controller("TimelineCtrl", function ($scope, $modal, $http, reservat
         }, function () {
             console.log('Modal dismissed at: ' + new Date() + "...");
         });
-    };
+    };*/
 });
-
 
 var ModalInstanceCtrl = function ($scope, $modalInstance, reservationService, newReservationForm) {
     $scope.newReservationForm = newReservationForm;
@@ -45,15 +45,31 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, reservationService, ne
                 }
             });
     };
-
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
 };
 
+var openNewReservationDialog = function (index, slideStart, slideEnd,$scope,$modal) {
+    $scope.newReservationForm = {name: "", index: index, start: slideStart, end: slideEnd};
+    var modalInstance = $modal.open({
+        templateUrl: 'newReservationDialog',
+        controller: ModalInstanceCtrl,
+        windowClass: "modalDialog",
+        resolve: {
+            newReservationForm: function () {
+                return $scope.newReservationForm;
+            }
+        }
+    });
+    modalInstance.result.then(function(x){}, function () {
+        console.log('Modal dismissed');
+    });
+};
 
-controllers.controller("MonthViewCtrl", function ($scope,monthViewService,$cacheFactory) {
+controllers.controller("MonthViewCtrl", function ($scope,monthViewService,$cacheFactory,$modal) {
     moment.lang('nb');
+    ///$scope.openNewReservationDialog=openNewReservationDialog;
     var cache = $cacheFactory('monthsBlocks');
     this.start = moment({day: 1});
     this.currentMonth = this.start.format('MMMM / YYYY');
@@ -63,36 +79,15 @@ controllers.controller("MonthViewCtrl", function ($scope,monthViewService,$cache
     this.datesOfMonths=monthViewService.generateMonthViewDays(this.start,$scope);
 
     this.newReservation = function () {
-        console.log("nnnnnn");
+        //console.log("not implemented [newReservation]");
+        openNewReservationDialog(1,'2014-01-10','2014-01-12',$scope,$modal);
     };
-    var sstart=moment();
-    var eend=moment().add('d',5);
-    this.blocks=[
-        {id:1,start:sstart,end:eend,name:"NNNNaimdjon"}
-    ];
-
     this.changeMonth = function (num) {
         var newStart=this.start.clone().add('months',num);
         this.currentMonth = newStart.format('MMMM / YYYY');
         this.datesOfMonths=monthViewService.generateMonthViewDays(newStart);
         this.start=newStart;
     }
-
-    this.blockPosition=function(block) {
-        var position=cache.get(block.id);
-        if(!(position == undefined))return position;
-        var date=block.start;
-        var startOfMonth=date.clone().startOf('month');
-        var indexWeek=1+date.week()-startOfMonth.week();
-        var top=110*indexWeek;
-        var left=40+(169*(date.day()-1));
-        console.log("top:"+top+", left:"+left+", for: "+date.format('DD.MMMM')+", day:"+date.day());
-        startOfMonth.week();
-        position={left:left,top:top}
-        cache.put(block.id,position);
-        return position;
-
-    };
 });
 
 

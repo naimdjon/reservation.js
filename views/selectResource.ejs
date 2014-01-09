@@ -1,0 +1,24 @@
+<html lang="en" ng-app="reservationApp">
+<head>
+    <style>
+        li{margin-top:4px;}
+    </style>
+</head>
+<body>
+<h2>Velg hytte</h2>
+<ul>
+<%
+for(var i=0; i<resources.length; i++) { %>
+<li>
+    <a href='monthView/<%= resources[i]._id %>'>
+        <%= resources[i].name%>
+    </a>
+</li>
+<% } %>
+</ul>
+
+<div>
+    <a href="/" style="font-size:10px; color:gray;">Flat visning</a>
+</div>
+</body>
+</html>

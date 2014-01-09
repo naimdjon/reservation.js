@@ -1,5 +1,6 @@
-
-/*needed for correct date formatting during serialization*/
+/**
+ * needed for correct date formatting during serialization
+ */
 Date.prototype.toJSON = function (key) {
     return this.getFullYear()   + '-' + (parseInt(this.getMonth()) +1) +  '-' +this.getDate();
 };

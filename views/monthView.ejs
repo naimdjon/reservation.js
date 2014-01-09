@@ -5,15 +5,17 @@
     <!--<script data-main="javascripts/main" src="javascripts/lib/require.js"></script>-->
     <!--<script src="javascripts/main.js"></script>-->
     <script type="text/javascript" src="/javascripts/lib/angular_1.2.0-rc.2.min.js"></script>
+    <!--<script type="text/javascript" src="/javascripts/lib/angular-route-1.2.0-rc.2.js"></script>-->
     <script type="text/javascript" src="/javascripts/lib/moment+langs.min.js"></script>
     <script type="text/javascript" src="/javascripts/lib/ui-bootstrap-tpls-0.6.0.js"></script>
+    <link rel="stylesheet" href="/stylesheets/lib/reset.css"/>
     <link rel="stylesheet" href="/stylesheets/lib/bootstrap-combined.min.css"/>
+    <link rel='stylesheet' href='/stylesheets/monthView.css'/>
+
     <script src="/javascripts/services.js"></script>
     <script src="/javascripts/directives.js"></script>
     <script src="/javascripts/controllers.js"></script>
     <script src="/javascripts/app.js"></script>
-    <link rel='stylesheet' href='/stylesheets/monthView.css'/>
-    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css'/>
     <title>Month-view</title>
 </head>
 <body>
@@ -23,6 +25,8 @@
         <div class="toolbarLeft">
             <button class="btn" ng-click="monthView.changeMonth(-1)"><</button>
             <button class="btn" ng-click="monthView.changeMonth(1)">></button>
+            &#160;&#160;
+            <span style="margin-top:2px;"><%=resourceName%></span>
         </div>
         <div class="toolbarMid tabMid center">{{monthView.currentMonth}}</div>
         <div class="toolbarRight">
@@ -37,25 +41,18 @@
             {{dayOfWeek.indexOf('none')!=0?dayOfWeek:''}}
         </th>
         </tr>
-
         <tr ng-repeat="week in monthView.datesOfMonths">
-            <td class="calDay" ng-repeat="date in week"
-                 ng-click="timeline.newReservation()">
+            <td class="calDay"
+                ng-repeat="date in week"
+                ng-click="monthView.newReservation()" ng-class="{busy : date.isBusy, newRes : hover}" title="{{date.res.name}}"
+                ng-mouseenter="hover = true"
+                ng-mouseleave="hover = false">
                 {{date.label.indexOf('none')!=0?date.label:''}}
-                <div ng-if="date.blocks!=undefined">
-                    <div alt="{{block.tooltip}}" class="blockX gradient"
-                         ng-style="{width:'{{block.span*50}}px'}"
-                         ng-repeat="block in date.blocks">
-                        {{block.name}}
-                    </div>
-                </div>
             </td>
         </tr>
     </table>
 </div>
 
-<br/>
-<br/>
-<br/>
+<% include newReservationTemplate %>
 </body>
 </html>

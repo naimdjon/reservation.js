@@ -11,3 +11,4 @@ var reservationApp=angular.module('reservationApp',
         'reservationApp.directives',
         'reservationApp.controllers'
     ]);
+

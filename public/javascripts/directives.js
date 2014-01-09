@@ -32,7 +32,7 @@ directives.directive('reservationDrag', function (reservationService) {
         }
     };
 })
-    .directive('reservationSlideNew', function (reservationService) {
+    .directive('reservationSlideNew', function (reservationService,$modal) {
         var slideStart;
         var index;
         return{
@@ -57,21 +57,17 @@ directives.directive('reservationDrag', function (reservationService) {
                 e.bind('mouseup', function (event) {
                     if (slideStarted) {
                         slideStarted = false;
-                        for (var i = 0; i < slideCells.length; i++) {
+                        for (var i = 0; i < slideCells.length; i++)
                             slideCells[i].removeClass("selectClass");
-                        }
                         var slideEnd = reservationService.gridCellToStartDate(jQuery(this), scope);
                         if(slideStart.equals(slideEnd))
                             slideEnd.add(1).days();
-                        //console.log(slideEnd.compareTo(slideStart));
                         if(slideEnd.compareTo(slideStart)<0){
                             var temp=slideStart;
                             slideStart=slideEnd;
                             slideEnd=temp;
                         }
-                        //console.log("slideStart:"+slideStart.toString("yyyy-MM-dd")+" -- " + slideEnd.toString("yyyy-MM-dd"));
-                        scope.openNewReservationDialog(index, slideStart.toString("yyyy-MM-dd"), slideEnd.toString("yyyy-MM-dd"));
-                        //scope.$apply();
+                        scope.openNewReservationDialog(index, slideStart.toString("yyyy-MM-dd"), slideEnd.toString("yyyy-MM-dd"),scope,$modal);
                     }
                 });
             }
@@ -93,8 +89,6 @@ directives.directive('reservationDrag', function (reservationService) {
                         var newEnd = newStart.clone().add(newDays).days();//reservationService.gridCellToEndDate(block, scope);
                         var width = block.outerWidth();
                         var numberOfDays = Math.round(width / cellWidth);
-                        //console.log("numberOfDays:" + numberOfDays + ",resid:" + options.reservationId+ ", newStart:" + newStart, newEnd );
-                        //alert("Not implemented on the server yet!");
                         reservationService.reservationResize(options.reservationId,options.resourceId,newStart,newEnd)
                             .then(function(result){
                                 console.log("resized:"+result);

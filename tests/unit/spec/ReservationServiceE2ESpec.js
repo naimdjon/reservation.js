@@ -63,8 +63,8 @@ describe('', function () {
             expect(endDate.format('DD.MM.YYYY')).toEqual('04.09.2013');
         });
 
-        it('should get the correct numberOfDays between start and end when hcaning the start date', function () {
-            var diff = diffDates(moment('20130902'), moment('20130910'));
+        it('should get the correct numberOfDays between start and end', function () {
+            var diff = diffDates(moment('20130902','YYYYMMDD'), moment('20130910','YYYYMMDD'));
             expect(8).toEqual(diff);
         });
     });

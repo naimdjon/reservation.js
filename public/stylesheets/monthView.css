@@ -160,3 +160,10 @@ td {
   z-index: 10000000;
   border-radius: 3px;
 }
+.busy {
+  background-color: #7ab5d3;
+  color: #fff;
+}
+.newRes {
+  background-color: #c09853;
+}

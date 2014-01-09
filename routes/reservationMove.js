@@ -45,8 +45,8 @@ function getEndDateFromStartDate(startDate,numberOfDays){
 
 
 function diffDates(start,end){
-    startDate=moment(start);
-    endDate=moment(end);
+    var startDate=moment(start);
+    var endDate=moment(end);
     var diff = startDate.diff(endDate, 'days');
     return diff/(24*3600*1000);
     //return  diff;

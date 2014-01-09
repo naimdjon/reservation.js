@@ -13,6 +13,10 @@ Dependencies
     express
     moment
     mongodb
+    stylus
+    nconf
+
+    npm install express moment mongodb nconf stylus ejs
 
 <!--express --sessions --css stylus --ejs reservation.js-->
 
