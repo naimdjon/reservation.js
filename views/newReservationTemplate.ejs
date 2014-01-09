@@ -10,8 +10,28 @@
         </div>
 
         <div class="modal-body">
-            <label for="name">Navn:</label>
-            <input type="text" id="name" ng-model="newReservationForm.name" autofocus/>
+            <fieldset>
+                <div class="formElem">
+                    <label for="name">Navn:</label>
+                    <input type="text" id="name" ng-model="newReservationForm.name" autofocus/>
+                </div>
+                <div class="formElem">
+
+                    <h4>Inline</h4>
+                    <div style="display:inline-block; min-height:290px;">
+                        <div class="well well-sm" ng-model="dt">
+                            <datepicker min="minDate" show-weeks="showWeeks"></datepicker>
+                        </div>
+                    </div>
+
+                    <label for="from">Fra:</label>
+                    <input type="text" id="from" ng-model="newReservationForm.from" autofocus/>
+
+
+                    <label for="from">Til:</label>
+                    <input type="text" id="from" ng-model="newReservationForm.from" autofocus/>
+               </div>
+            </fieldset>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" ng-click="ok()">OK</button>
