@@ -10,23 +10,12 @@
         </div>
 
         <div class="modal-body">
-                    <label for="name">Navn:</label>
-                    <input type="text" id="name" ng-model="newReservationForm.name" autofocus/>
-                <br/>
-                <br/>
-                    <div style="display:inline-block; min-height:230px;">
-                        <div class="well well-sm" ng-model="dt">
-                            <datepicker min="minDate" show-weeks="showWeeks"></datepicker>
-                        </div>
-                    </div>
+            <label for="name">Navn:</label>
 
-                   <!-- <label for="from">Fra:</label>
-                    <input type="text" id="from" ng-model="newReservationForm.from" autofocus/>
+            <br/>
+            <input type="radio" name="to_be_cleaned" value="true">&#160; &#216;nsker &#229; bestille vask</input><br/>
+            <input type="radio" name="to_be_cleaned" value="false">&#160; &#216;nsker &#229; vaske selv</input>
 
-
-                    <label for="from">Til:</label>
-                    <input type="text" id="from" ng-model="newReservationForm.from" autofocus/>-->
-        </div>
         <div class="modal-footer">
             <button class="btn btn-primary" ng-click="ok()">OK</button>
             <button class="btn btn-warning" ng-click="cancel()">Cancel</button>

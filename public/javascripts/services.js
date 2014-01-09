@@ -2,11 +2,12 @@
 
 var services = angular.module('reservationApp.services', []);
 
-services.factory('reservationService', function ($http, $location) {
+
+services.factory('bookingService', function ($http, $location) {
     var urlPath = $location.path();// || 'http://localhost:8000';
     var timelineData;
+    var reservations;
     var getTimelineData = function () {
-        //console.log(":::"+timelineData);
         var promise = $http.get(urlPath + '/timelineData')
             .then(function (res) {
                 timelineData = res.data;
@@ -15,7 +16,16 @@ services.factory('reservationService', function ($http, $location) {
         return promise;
     };
 
+    var getReservations = function (resourceId,yearMonth) {
+        var promise = $http.get(urlPath + '/bookings/'+resourceId+"/"+yearMonth)
+            .then(function (res) {
+                reservations = res.data;
+                return reservations;
+            });
+        return promise;
+    };
 
+    //flat view
     var getDaysOfMonths = function getDaysOfMonths(startDate, endDate) {
         var daysOfMonths = [];
         var counterDate = startDate.clone();
@@ -31,7 +41,7 @@ services.factory('reservationService', function ($http, $location) {
         return daysOfMonths;
     }
 
-
+    //flat view
     var getHeaderMonths = function getHeaderMonths(startDate, endDate) {
         var headerMonths = [];
         var counterDate = startDate.clone();
@@ -46,7 +56,7 @@ services.factory('reservationService', function ($http, $location) {
         return headerMonths;
     };
 
-
+    //flat view
     var daysBetween = function (startDate, endDate) {
         if (!startDate || !endDate)
             return 0;
@@ -62,7 +72,7 @@ services.factory('reservationService', function ($http, $location) {
         return count;
     };
 
-
+    //flat view
     var gridCellToStartDate = function (gridCell, scope) {
         var container = gridCell.parent();
         var scroll = container.scrollLeft();
@@ -75,7 +85,7 @@ services.factory('reservationService', function ($http, $location) {
         return date;
     };
 
-
+    //flat view
     var reservationDrag = function (reservationId, resourceId, newStart, newEnd) {
         console.log("timelineData:" + timelineData[0].reservations);
         var promise = $http.post(urlPath + '/reservationMove', JSON.stringify({reservationId: reservationId, resourceId: resourceId, newStart: newStart, newEnd: newEnd}))
@@ -85,6 +95,7 @@ services.factory('reservationService', function ($http, $location) {
         return promise;
     };
 
+    //flat view
     var reservationResize = function (reservationId, resourceId, newStart, newEnd) {
         var promise = $http.post(urlPath + '/reservationChangeDates', JSON.stringify({reservationId: reservationId, resourceId: resourceId, newStart: newStart, newEnd: newEnd}))
             .then(function (res) {
@@ -110,6 +121,7 @@ services.factory('reservationService', function ($http, $location) {
     };
 
     return {
+        getReservations: getReservations,
         getTimelineData: getTimelineData,
         reserveUnit: reserveUnit,
         reservationDrag: reservationDrag,
@@ -127,81 +139,45 @@ function eq(moment1, moment2){
     && moment1.month()==moment2.month();
 }
 
-function assignReservationBlocks(timelineData,resourceId,earliestStart,end) {
-    var reservationBlocks=[];
-    for(var i in timelineData) {
-        if(timelineData[i]._id==resourceId){
-            for(var r in timelineData[i].reservations){
-                var reservation=timelineData[i].reservations[r];
-                var s=moment(reservation.start);
-                var e=moment(reservation.end);
-                if(s.isBefore(earliestStart) || s.isAfter(end) || eq(s,end) || e.isBefore(earliestStart) || e.isBefore(s))
-                    continue;
-                if(reservationBlocks[s.date()]==undefined)reservationBlocks[s.date()]=[];
-                reservationBlocks[s.date()].push(reservation);
-            }
-            break;
-        }
-    }
-    return reservationBlocks;
-
+function weekOfMonth(d){
+    var firstDay=moment(d).date(1);
+    return moment(d).isoWeek()-firstDay.isoWeek();
 }
 
-services.factory('monthViewService', function (reservationService,$location) {
-        var path = $location.absUrl();
-    var resourceId=path.substr(path.indexOf("monthView/")+10).replace('/',''); //todo: configure ngRoute for this.
-    var generateMonthViewDays = function (start,$scope) {
-        var runnerDate = start.clone();
-        var startWeek = start.week();
-        var monthViewDays = [];
-        monthViewDays[0] = [];
-        var day = runnerDate.day();
-        if (day == 0)day = 7;
-        for (var d = 1; d < day; d++)
-            monthViewDays[0].push({label:'none' + d});
-        var end = runnerDate.clone().add('months', 1);
-        var indexWeek = 0, previousWeek = startWeek;
-        while (runnerDate.isBefore(end)) {
-            if (runnerDate.week() != previousWeek) {
-                ++indexWeek;
-                previousWeek = runnerDate.week();
-            }
-            if (monthViewDays[indexWeek] == undefined)monthViewDays[indexWeek] = [];
-            var dateWithBlock={};
-            dateWithBlock.label=runnerDate.date();
-            monthViewDays[indexWeek].push(dateWithBlock);
-            runnerDate = runnerDate.add('days', 1);
-        }
-        var remainingCells = (monthViewDays[indexWeek - 1].length - monthViewDays[indexWeek].length);
-        for (var m = 0; m < remainingCells; m++)
-            monthViewDays[indexWeek].push({label:'none' + m});
+services.factory('monthViewService', function (bookingService, $location) {
+    var path = $location.absUrl();
+    var resourceId = path.substr(path.indexOf("monthView/") + 10).replace('/', ''); //todo: configure ngRoute for this.
 
-        reservationService.getTimelineData().then(function (data) {
-            var reservationBlocks=assignReservationBlocks(data,resourceId,start,end);
-            for (var i=0;i<reservationBlocks.length;i++) {
-               if(reservationBlocks[i]==undefined)continue;
-                for(var j=0;j<reservationBlocks[i].length;j++) {
-                    var res=reservationBlocks[i][j];
-                    var resStart=moment(res.start,'YYYY-MM-DD');
-                    var resEnd=moment(res.end,'YYYY-MM-DD');
-                    var idxWeek=resStart.week()-startWeek;
-                    var day = monthViewDays[idxWeek][resStart.day()];
-                    if(day.blocks==undefined)
-                        day.blocks=[];
-                    day.blocks.push({name:res.name,span:resEnd.diff(resStart,"days"),tooltip:res.start+","+res.end+", "+res.name+","+res._id});
-                    var start=resStart.clone();
-                    while(start.isBefore(resEnd)) {
-                        monthViewDays[idxWeek][start.weekday()].res=res;
-                        monthViewDays[idxWeek][start.weekday()].isBusy=true;
-                        start.add('d',1);
-                        idxWeek=start.week()-startWeek;
-                    }
-                }
-            }
+    function addBookingsToView(start, weeks) {
+        bookingService.getReservations(resourceId, start.format('YYYY.MM.DD')).then(function (data) {
+            data.forEach(function (booking) {
+                var from = moment(booking.from);
+                do{
+                    var calendarDay = weeks[weekOfMonth(from)].days[from.weekday()];
+                    calendarDay.isBusy = true;
+                    calendarDay.booking = booking;
+                }while (from.add('d', 1).isBefore(moment(booking.to)));
+            });
         });
-        return monthViewDays;
+    }
+
+    var generateCalendarMonthView = function (start, $scope) {
+        var weeks = [];
+        var end=start.clone().add('M',1);
+        var runnerDate = (start.clone()).isoWeekday(1);
+        while (runnerDate.isBefore(end)){
+            var week={week:runnerDate.week(),days:[]};
+            for(var weekDay=0; weekDay<=6;weekDay++) {
+                week.days.push({label:runnerDate.date(),isCurrentMonth:(start.month()==runnerDate.month())});
+                runnerDate.add('d',1);
+            }
+            weeks.push(week);
+        }
+        addBookingsToView(start, weeks);
+        return weeks;
     };
     return{
-        generateMonthViewDays: generateMonthViewDays  //api
+        generateCalendarMonthView: generateCalendarMonthView  //api
     }
 });
+

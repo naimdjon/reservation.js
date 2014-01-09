@@ -2,7 +2,7 @@
 
 var directives=angular.module('reservationApp.directives', []);
 
-directives.directive('reservationDrag', function (reservationService) {
+directives.directive('reservationDrag', function (bookingService) {
     return {
         restrict: 'A',
         link: function (scope, elm, attrs) {
@@ -16,13 +16,13 @@ directives.directive('reservationDrag', function (reservationService) {
                 },
                 stop: function () {
                     var block = jQuery(this);
-                    var newStart = reservationService.gridCellToStartDate(block, scope);
+                    var newStart = bookingService.gridCellToStartDate(block, scope);
                     var diff = options.diff;
                     var newEnd = newStart.clone().add(parseInt(diff)).days();
                     block.zIndex(block.zIndex() - 1);
                     //console.log("newEnd:"+newEnd+",diff:"+diff);
                     //console.log("diff:"+diff+"resid:" + options.  +",resourceId:"+options.resourceId+ ", newStart:" + newStart);
-                    reservationService.reservationDrag(options.reservationId,options.resourceId,newStart,newEnd)
+                    bookingService.reservationDrag(options.reservationId,options.resourceId,newStart,newEnd)
                         .then(function(result){
                             console.log("stoppped!");
                     });
@@ -32,7 +32,7 @@ directives.directive('reservationDrag', function (reservationService) {
         }
     };
 })
-    .directive('reservationSlideNew', function (reservationService,$modal) {
+    .directive('reservationSlideNew', function (bookingService,$modal) {
         var slideStart;
         var index;
         return{
@@ -51,7 +51,7 @@ directives.directive('reservationDrag', function (reservationService) {
                         gridCell.addClass("selectClass");
                         slideCells.push(gridCell);
                         index=gridCell.parent().index();
-                        slideStart  = reservationService.gridCellToStartDate(gridCell, scope);
+                        slideStart  = bookingService.gridCellToStartDate(gridCell, scope);
                     }
                 });
                 e.bind('mouseup', function (event) {
@@ -59,7 +59,7 @@ directives.directive('reservationDrag', function (reservationService) {
                         slideStarted = false;
                         for (var i = 0; i < slideCells.length; i++)
                             slideCells[i].removeClass("selectClass");
-                        var slideEnd = reservationService.gridCellToStartDate(jQuery(this), scope);
+                        var slideEnd = bookingService.gridCellToStartDate(jQuery(this), scope);
                         if(slideStart.equals(slideEnd))
                             slideEnd.add(1).days();
                         if(slideEnd.compareTo(slideStart)<0){
@@ -73,7 +73,7 @@ directives.directive('reservationDrag', function (reservationService) {
             }
         }
     })
-    .directive('reservationResize', function (reservationService) {
+    .directive('reservationResize', function (bookingService) {
         return {
             restrict: 'A',
             link: function (scope, elm, attrs) {
@@ -85,11 +85,11 @@ directives.directive('reservationDrag', function (reservationService) {
                     stop: function (e,ui) {
                         var newDays=ui.size.width/cellWidth;
                         var block = jQuery(this);
-                        var newStart = reservationService.gridCellToStartDate(block, scope);
-                        var newEnd = newStart.clone().add(newDays).days();//reservationService.gridCellToEndDate(block, scope);
+                        var newStart = bookingService.gridCellToStartDate(block, scope);
+                        var newEnd = newStart.clone().add(newDays).days();//bookingService.gridCellToEndDate(block, scope);
                         var width = block.outerWidth();
                         var numberOfDays = Math.round(width / cellWidth);
-                        reservationService.reservationResize(options.reservationId,options.resourceId,newStart,newEnd)
+                        bookingService.reservationResize(options.reservationId,options.resourceId,newStart,newEnd)
                             .then(function(result){
                                 console.log("resized:"+result);
                         });

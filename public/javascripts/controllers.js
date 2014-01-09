@@ -1,22 +1,23 @@
 var controllers = angular.module('reservationApp.controllers', []);
 
-controllers.controller("TimelineCtrl", function ($scope, $modal, $http, reservationService) {
+//flat visning
+controllers.controller("TimelineCtrl", function ($scope, $modal, $http, bookingService) {
     this.startDate = Date.today().set({day: 1});   //TODO convert to "moment" instead
     $scope.startDate = this.startDate;
     this.endDate = this.startDate.clone().add(1).years();
-    this.headerMonths = reservationService.getHeaderMonths(this.startDate, this.endDate);
-    this.daysOfMonths = reservationService.getDaysOfMonths(this.startDate, this.endDate);
-    this.daysBetween = reservationService.daysBetween;
-    reservationService.getTimelineData().then(function (data) {
+    this.headerMonths = bookingService.getHeaderMonths(this.startDate, this.endDate);
+    this.daysOfMonths = bookingService.getDaysOfMonths(this.startDate, this.endDate);
+    this.daysBetween = bookingService.daysBetween;
+    bookingService.getTimelineData().then(function (data) {
         $scope.timelineData = data;
     });
     $scope.openNewReservationDialog = openNewReservationDialog;
 });
 
-var ModalInstanceCtrl = function ($scope, $modalInstance, reservationService, newReservationForm) {
+var ModalInstanceCtrl = function ($scope, $modalInstance, bookingService, newReservationForm) {
     $scope.newReservationForm = newReservationForm;
     $scope.ok = function () {
-        reservationService.reserveUnit(newReservationForm)
+        bookingService.reserveUnit(newReservationForm)
             .then(function (result) {
                 if (result && (result["error"] && result["error"].length > 0)) {
                     $scope.newReservationError = result["error"];
@@ -78,13 +79,13 @@ var openNewReservationDialog = function (index, slideStart, slideEnd,$scope,$mod
 
 controllers.controller("MonthViewCtrl", function ($scope,monthViewService,$cacheFactory,$modal) {
     moment.lang('nb');
-    var cache = $cacheFactory('monthsBlocks');
+    //var cache = $cacheFactory('monthsBlocks');
     this.start = moment({day: 1});
     this.currentMonth = this.start.format('MMMM / YYYY');
     this.daysOfWeek = [];
     for (var i = 0; i < 7; i++)
         this.daysOfWeek.push(moment().startOf('week').add('days', i).format('ddd'));
-    this.datesOfMonths=monthViewService.generateMonthViewDays(this.start,$scope);
+    this.weeks=monthViewService.generateCalendarMonthView(this.start,$scope);
 
     this.newReservation = function () {
         openNewReservationDialog(1,'2014-01-10','2014-01-12',$scope,$modal);
@@ -92,7 +93,7 @@ controllers.controller("MonthViewCtrl", function ($scope,monthViewService,$cache
     this.changeMonth = function (num) {
         var newStart=this.start.clone().add('months',num);
         this.currentMonth = newStart.format('MMMM / YYYY');
-        this.datesOfMonths=monthViewService.generateMonthViewDays(newStart);
+        this.weeks=monthViewService.generateCalendarMonthView(newStart);
         this.start=newStart;
     }
 });

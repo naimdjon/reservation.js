@@ -2,7 +2,7 @@
 
 marg=20px
 heightWeek=50px
-border=#428bca
+border=#CCC
 gradient=linear-gradient(to bottom, #0088cc, #0044cc)
 fontColor=#0088cc
 
@@ -154,25 +154,23 @@ td, th
 
 table.monthView
   border-collapse:collapse
-  width:90%
+  width:400px
   margin:10px
   margin-left:40px
 
-table.monthView, .monthView td, .monthView th
-  border:1px solid border
+//table.monthView, .monthView td, .monthView th
+
 
 .monthView th
-  color:#fff
+  border:none
   text-align: center
   padding:5px
   font-size:14px
 
 .monthView td
-  padding:20px
+  border:1px solid border
+  padding:10px
   text-align:right
-  height:40px
-  width: 50px
-  max-width: 50px
   position: relative
   overflow: visible
 
@@ -181,7 +179,6 @@ table.monthView, .monthView td, .monthView th
 
 .calDay
   font-size: 18px
-  color:#428bca
 
 .tabMid
   color:fontColor
@@ -212,14 +209,13 @@ table.monthView, .monthView td, .monthView th
   z-index:1050
   height:560px
   margin-left:-280px
-  background-color:#ffffff
-  border:1px solid #999
-  border:1px solid rgba(0, 0, 0, 0.3)
-  *border:1px solid #999
-  -webkit-box-shadow:0 3px 7px rgba(0, 0, 0, 0.3)
-  -moz-box-shadow:0 3px 7px rgba(0, 0, 0, 0.3)
-  box-shadow:0 3px 7px rgba(0, 0, 0, 0.3)
-  -webkit-background-clip:padding-box
-  -moz-background-clip:padding-box
-  background-clip:padding-box
   outline:none
+
+.notCurrentMonth
+  color:#aaaaaa
+  background-color:#F0FFFF
+  font-size:12px
+
+.monthBtns .btn
+  font-size:18px
+  color:#737373

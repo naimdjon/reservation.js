@@ -26,15 +26,15 @@ describe('', function () {
         $httpBackend.when('POST', '/newReservation').respond({error: 'CheckError'});
     }));
 
-    beforeEach(inject(function(reservationService){
-        reservationService.getTimelineData().then(function(data){
+    beforeEach(inject(function(bookingService){
+        bookingService.getTimelineData().then(function(data){
             timelineData=data;
         });
     }));
 
     describe('timelineData', function () {
-        it('should send data to the server to get the timelineData', inject(function (reservationService) {
-            reservationService.getTimelineData().then(function(data){
+        it('should send data to the server to get the timelineData', inject(function (bookingService) {
+            bookingService.getTimelineData().then(function(data){
                 timelineData=data;
             });
             $httpBackend.flush();
@@ -42,14 +42,14 @@ describe('', function () {
         }));
     });
     describe('reserveUnit', function () {
-        it('should send data to the server for reservation', inject(function (reservationService) {
-            reservationService.getTimelineData().then(function(data){
+        it('should send data to the server for reservation', inject(function (bookingService) {
+            bookingService.getTimelineData().then(function(data){
                 timelineData=data;
             });
             $httpBackend.flush();
             var newReservationForm={name:"test",start:Date.today(),end:Date.today().add(2).days(),index:0};
             var resultMessage='';
-            reservationService.reserveUnit(newReservationForm).then(function(result){
+            bookingService.reserveUnit(newReservationForm).then(function(result){
                 resultMessage=result["error"];
             });
             $httpBackend.flush();
