@@ -1,3 +1,4 @@
+
 exports.index = function(req, res){
   MongoClient.connect(dbURL, function(err, db) {
       if(err) throw err;
@@ -19,7 +20,7 @@ exports.showResourceMonthView = function(req, res){
     MongoClient.connect(dbURL, function(err, db) {
         if(err) throw err;
         db.collection(collectionName).findOne({"_id":ObjectID(resourceId)}, {'name':true}, function(err, document){
-            console.log("resourceId:"+resourceId);
+            //console.log("resourceId:"+resourceId);
             res.render('monthView', {
                 title: 'Reservation.js, monthView',
                 resourceId: resourceId,

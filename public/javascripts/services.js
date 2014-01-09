@@ -135,9 +135,7 @@ function assignReservationBlocks(timelineData,resourceId,earliestStart,end) {
                 var reservation=timelineData[i].reservations[r];
                 var s=moment(reservation.start);
                 var e=moment(reservation.end);
-                //console.log("found res:"+s+"("+ s.format('DD.MM')+" --- "+earliestStart.format('DD.MM')+")"+", is before start:"+s.isBefore(earliestStart)+", isafter end:"+s.isAfter(end));
-                if(s.isBefore(earliestStart) || s.isAfter(end) || eq(s,end)
-                    || e.isBefore(earliestStart) || e.isBefore(s))
+                if(s.isBefore(earliestStart) || s.isAfter(end) || eq(s,end) || e.isBefore(earliestStart) || e.isBefore(s))
                     continue;
                 if(reservationBlocks[s.date()]==undefined)reservationBlocks[s.date()]=[];
                 reservationBlocks[s.date()].push(reservation);
@@ -150,7 +148,7 @@ function assignReservationBlocks(timelineData,resourceId,earliestStart,end) {
 }
 
 services.factory('monthViewService', function (reservationService,$location) {
-    var path = $location.absUrl();
+        var path = $location.absUrl();
     var resourceId=path.substr(path.indexOf("monthView/")+10).replace('/',''); //todo: configure ngRoute for this.
     var generateMonthViewDays = function (start,$scope) {
         var runnerDate = start.clone();
@@ -193,15 +191,11 @@ services.factory('monthViewService', function (reservationService,$location) {
                     day.blocks.push({name:res.name,span:resEnd.diff(resStart,"days"),tooltip:res.start+","+res.end+", "+res.name+","+res._id});
                     var start=resStart.clone();
                     while(start.isBefore(resEnd)) {
-                        //console.log('adding: '+idxWeek+", "+start.weekday()+", "+start.format('DMYY'));
                         monthViewDays[idxWeek][start.weekday()].res=res;
                         monthViewDays[idxWeek][start.weekday()].isBusy=true;
                         start.add('d',1);
                         idxWeek=start.week()-startWeek;
-                        //console.log("idxWeek:"+idxWeek);
                     }
-                    /*monthViewDays[idxWeek][start.weekday()].isBusy=true;
-                    monthViewDays[idxWeek][start.weekday()].res=res;*/
                 }
             }
         });

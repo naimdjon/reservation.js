@@ -45,7 +45,9 @@
         <tr ng-repeat="week in monthView.datesOfMonths">
             <td class="calDay"
                 ng-repeat="date in week"
-                ng-click="monthView.newReservation()" ng-class="{busy : date.isBusy, newRes : hover}" title="{{date.res.name}}"
+                ng-click="monthView.newReservation()"
+                ng-class="{busy : date.isBusy, newRes : hover}"
+                title="{{date.res.name}}"
                 ng-mouseenter="hover = true"
                 ng-mouseleave="hover = false">
                 {{date.label.indexOf('none')!=0?date.label:''}}
