@@ -7,7 +7,11 @@ gradient=linear-gradient(to bottom, #0088cc, #0044cc)
 fontColor=#0088cc
 
 body
-  font-size: 0.8em
+  font-size: 14px
+  line-height:1.428571429
+
+h1,h2,h3
+  margin:5px
 
 .gradient
   background-image:gradient
@@ -136,22 +140,34 @@ body
 .height
   height:50px
 
-
+/*
 table
+  border-spacing: 2px
+  border-collapse:collapse
+  font-size: 14px
+
+td, th
+  display: table-cell
+  vertical-align: inherit
+  line-height: 1.428571429
+*/
+
+table.monthView
   border-collapse:collapse
   width:90%
   margin:10px
   margin-left:40px
 
-table, td, th
+table.monthView, .monthView td, .monthView th
   border:1px solid border
 
-th
+.monthView th
   color:#fff
   text-align: center
   padding:5px
+  font-size:14px
 
-td
+.monthView td
   padding:20px
   text-align:right
   height:40px
@@ -182,5 +198,28 @@ td
 .newRes
   background-color:#C09853
 
-.modalDialog
-  width:270px
+.modal, .modal-dialog
+  width:400px
+  height:500px
+
+.modal-content
+  border:0
+
+.modal
+  position:fixed
+  top:10%
+  left:50%
+  z-index:1050
+  height:560px
+  margin-left:-280px
+  background-color:#ffffff
+  border:1px solid #999
+  border:1px solid rgba(0, 0, 0, 0.3)
+  *border:1px solid #999
+  -webkit-box-shadow:0 3px 7px rgba(0, 0, 0, 0.3)
+  -moz-box-shadow:0 3px 7px rgba(0, 0, 0, 0.3)
+  box-shadow:0 3px 7px rgba(0, 0, 0, 0.3)
+  -webkit-background-clip:padding-box
+  -moz-background-clip:padding-box
+  background-clip:padding-box
+  outline:none
