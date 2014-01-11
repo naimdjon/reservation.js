@@ -10,6 +10,7 @@
     "mongoose": "*",
     "stylus": "*",
     "everyauth": "*"
+    ,"mongoose-auth":"*"
   },
   "engines": {
     "node": "0.10.x",
