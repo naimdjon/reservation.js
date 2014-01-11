@@ -19,6 +19,13 @@ Dependencies
     npm install express moment mongodb nconf stylus ejs
 
 <!--express --sessions --css stylus --ejs reservation.js-->
+<!--
+fix the everyauth bug:
+https://github.com/cbou/mongoose-auth/commit/43a5e3781d56b75fee26a5b8582b285db007f000
+https://github.com/cbou/mongoose-auth/commit/edc2bd2a59b6d392e86b18dddd197d93e7538a26
+change approval_prompt to auto in node_modules/everyauth/lib/modules/google.js
+, approval_prompt: 'auto'
+-->
 
 License
 -------

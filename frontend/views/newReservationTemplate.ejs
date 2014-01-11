@@ -1,0 +1,29 @@
+<div>
+    <script type="text/ng-template" id="newBookingDialog">
+        <div class="modal-header">
+            <h3>Ny reservasjon</h3>
+        </div>
+        <div ng-if="newReservationError">
+            <div class="error">
+                {{newReservationError}}
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <label for="name">Bestiller:</label>
+            <span>{{newBookingForm.userEmail}}</span>
+            <br/>
+            <label for="from">Fra/til:</label>
+            <span>{{newBookingForm.from}}</span> --
+            <span>{{newBookingForm.to}}</span>
+            <br/>
+
+            <input type="radio" name="to_be_cleaned" value="false" ng-model="newBookingForm.to_be_cleaned">&#160; &#216;nsker &#229; vaske selv</input><br/>
+            <input type="radio" name="to_be_cleaned" value="true" ng-model="newBookingForm.to_be_cleaned">&#160; &#216;nsker &#229; bestille vask</input>
+
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+</div>

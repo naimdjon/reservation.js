@@ -3,11 +3,14 @@
 <head>
     <title><%= title %></title>
     <% include header %>
+
 </head>
 <body>
+<% include loginInfo%>
 
-<div ng-controller="MonthViewCtrl as monthView">
-    <div style="margin:2px;"><b><%=resourceName%></b></div>
+<script>resourceId="<%=resourceId%>"</script>
+<div ng-controller="MonthViewCtrl as monthView" class="monthViewDiv">
+    <div style="margin:10px;margin-left:200px;"><b><%=resourceName%></b></div>
     <table class="monthView">
         <!--navigering (forrige måned, neste måned)-->
         <tr class="monthBtns">
@@ -30,18 +33,24 @@
 
         <tr ng-repeat="week in monthView.weeks">
             <td class="calDay"
-                title="{{date.booking.personId}}"
+                title="{{date.booking.email}}"
                 ng-repeat="date in week.days"
                 ng-class="{busy : date.isBusy, newRes : hover, notCurrentMonth : !date.isCurrentMonth}"
                 ng-mouseenter="hover = true"
                 ng-mouseleave="hover = false"
-                ng-click="monthView.newReservation()">
+                ng-click="monthView.newBooking('<%=userEmail%>',date)">
                 {{date.label}}
             </td>
         </tr>
     </table>
+    <br/>
+    <div class="btn-group">
+            <button ng-repeat="month in monthView.months"
+                    ng-click="monthView.changeMonth(month)"
+                    type="button" class="btn btn-default">{{month}}</button>
+            <!--<button type="button" class="btn btn-default btn-sm"><strong class="ng-binding">{{month}}</strong></button>-->
+    </div>
 </div>
-
 <% include newReservationTemplate %>
 </body>
 </html>
