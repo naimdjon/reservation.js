@@ -2,27 +2,25 @@ var controllers = angular.module('reservationApp.controllers', []);
 
 controllers.controller("MonthViewCtrl", function ($scope,monthViewService,$modal) {
     moment.lang('nb');
-    var resourceId=window.resourceId;
+    var resourceId=window.resourceId,email=window.userEmail;
     this.start = moment({day: 1});
     this.currentMonth = this.start.format('MMMM / YYYY');
-    this.daysOfWeek = [];
+    this.daysOfWeek = []
     this.months = []
+    this.greenPeriods = []
+    this.showWeekNumbers=true
     for (var i = 0; i < 12; i++)this.months.push(moment().month(i).format('MMMM'));
     for (var i = 0; i < 7; i++)this.daysOfWeek.push(moment().startOf('week').add('days', i).format('ddd'));
-    this.weeks=monthViewService.generateCalendarMonthView(this.start,resourceId);
-
+    this.calendarView = monthViewService.generateCalendarMonthView(this.start,resourceId);
     this.changeMonth = function (num) {
-        console.log("me called with "+num);
         var newStart=isNaN(num)?this.start.clone().month(num):this.start.clone().add('months',num);
         this.currentMonth = newStart.format('MMMM / YYYY');
-        this.weeks=monthViewService.generateCalendarMonthView(newStart,resourceId);
+        this.calendarView = monthViewService.generateCalendarMonthView(newStart,resourceId);
         this.start=newStart;
-        console.dir(this.weeks);
     }
-
     var monthView=this;
-    this.newBooking = function (email,d) {
-        openNewBookingDialog(email, resourceId, this.start.clone().date(d.label),$scope,$modal,monthView);
+    this.newBooking = function (d) {
+        openNewBookingDialog(email, resourceId, d.momentDate.clone(),$scope,$modal,monthView);
     };
 
 

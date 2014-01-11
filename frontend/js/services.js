@@ -13,7 +13,6 @@ services.factory('bookingService', function ($http) {
             });
         return promise;
     };
-
     var reserveUnit = function (newBookingForm) {
         var userEmail = newBookingForm.userEmail,resourceId=newBookingForm.resourceId, from = newBookingForm.fromDate, to = newBookingForm.toDate;
         var result;
@@ -25,18 +24,18 @@ services.factory('bookingService', function ($http) {
             });
         return promise;
     };
-
+    var greenPeriods=function(from,to){
+        return $http.get('/green_periods/'+from+":"+to)
+            .then(function (res) {
+                return res.data;
+            });
+    };
     return {
         getBookingsForResource: getBookingsForResource,
+        getGreenPeriods: greenPeriods,
         reserveUnit: reserveUnit
     };
 });
-
-function eq(moment1, moment2){
-    return moment1.date()==moment2.date()
-     && moment1.year()==moment2.year()
-    && moment1.month()==moment2.month();
-}
 
 function weekOfMonth(d){
     var firstDay=moment(d).date(1);
@@ -57,23 +56,45 @@ services.factory('monthViewService', function (bookingService) {
         });
     }
 
-    var generateCalendarMonthView = function (start,resourceId) {
-        var weeks = [];
-        var end=start.clone().add('M',1);
+    function markGreenPeriods(start,calendarView) {
+        bookingService.getGreenPeriods(start.format('YYYY-MM-DD'),start.clone().add('m',1).format('YYYY-MM-DD'))
+            .then(function (data) {
+                calendarView.greenPeriods=data;
+                calendarView.greenPeriods.forEach(function (greenPeriod) {
+                    var from = moment(greenPeriod.from),to=moment(greenPeriod.to);
+                    if(from.month()==start.month()){
+                        do{
+                            var calendarDay = calendarView.weeks[weekOfMonth(from)].days[from.weekday()];
+                            calendarDay.isBusy?calendarDay.isBusyGreenDay=true:calendarDay.isGreenDay = true;
+                        }while (from.add('d', 1).isBefore(to) || from.isSame(to));
+                    }
+                });
+            });
+    }
+
+    function generateDates(weeks,start) {
+        var end = start.clone().add('M', 1);
         var runnerDate = (start.clone()).isoWeekday(1);
-        while (runnerDate.isBefore(end)){
-            var week={week:runnerDate.week(),days:[]};
-            for(var weekDay=0; weekDay<=6;weekDay++) {
-                week.days.push({label:runnerDate.date(),isCurrentMonth:(start.month()==runnerDate.month())});
-                runnerDate.add('d',1);
+        while (runnerDate.isBefore(end)) {
+            var week = {week: runnerDate.week(), days: [], number: runnerDate.isoWeek()};
+            for (var weekDay = 0; weekDay <= 6; weekDay++) {
+                week.days.push({label: runnerDate.date(), isCurrentMonth: (start.month() == runnerDate.month()), momentDate: runnerDate.clone()});
+                runnerDate.add('d', 1);
             }
             weeks.push(week);
         }
-        addBookingsToView(start, weeks,resourceId);
-        return weeks;
+    }
+
+
+    var generateCalendarMonthView = function (start,resourceId) {
+        var calendarView={weeks: []};
+        generateDates(calendarView.weeks,start);
+        addBookingsToView(start, calendarView.weeks,resourceId);
+        markGreenPeriods(start, calendarView);
+        return calendarView;
     };
     return{
-        generateCalendarMonthView: generateCalendarMonthView  //api
+         generateCalendarMonthView: generateCalendarMonthView //api
     }
 });
 

@@ -32,7 +32,7 @@ describe('', function () {
         });
     }));
 
-    describe('timelineData', function () {
+    /*describe('timelineData', function () {
         it('should send data to the server to get the timelineData', inject(function (bookingService) {
             bookingService.getTimelineData().then(function(data){
                 timelineData=data;
@@ -40,7 +40,7 @@ describe('', function () {
             $httpBackend.flush();
             expect(timelineData).toBeDefined();
         }));
-    });
+    });*/
     describe('reserveUnit', function () {
         it('should send data to the server for reservation', inject(function (bookingService) {
             bookingService.getTimelineData().then(function(data){
@@ -57,7 +57,7 @@ describe('', function () {
         }));
     });
 
-    describe('reservationDrag', function () {
+    /*describe('reservationDrag', function () {
         it('should get the correct enddate given a newStartDate', function () {
             var endDate = getEndDateFromStartDate(moment('20130902','YYYYMMDD'), 2);
             expect(endDate.format('DD.MM.YYYY')).toEqual('04.09.2013');
@@ -67,7 +67,7 @@ describe('', function () {
             var diff = diffDates(moment('20130902','YYYYMMDD'), moment('20130910','YYYYMMDD'));
             expect(8).toEqual(diff);
         });
-    });
+    });*/
 
 });
 

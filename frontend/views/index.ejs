@@ -8,49 +8,81 @@
 <body>
 <% include loginInfo%>
 
-<script>resourceId="<%=resourceId%>"</script>
+<script>resourceId="<%=resourceId%>";userEmail="<%=userEmail%>";</script>
 <div ng-controller="MonthViewCtrl as monthView" class="monthViewDiv">
-    <div style="margin:10px;margin-left:200px;"><b><%=resourceName%></b></div>
-    <table class="monthView">
-        <!--navigering (forrige måned, neste måned)-->
-        <tr class="monthBtns">
-            <th>
-                <button type="button" class="btn btn-default btn-sm pull-left" ng-click="monthView.changeMonth(-1)"><i class="glyphicon glyphicon-chevron-left"></i></button>
-            </th>
-            <th colspan="5">
-                <button type="button" class="btn btn-default btn-sm btn-block"><strong class="ng-binding">{{monthView.currentMonth}}</strong></button>
-            </th>
-            <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="monthView.changeMonth(1)"><i class="glyphicon glyphicon-chevron-right"></i></button></th>
-        </tr>
-        <!--Ukedager-->
-        <tr>
-            <th class="center"
-                 ng-repeat="dayOfWeek in monthView.daysOfWeek"
-                 ng-style="{borderRight:'{{$index!=6?none:1}}px'}">
-                {{dayOfWeek.indexOf('none')!=0?dayOfWeek:''}}
-            </th>
-        </tr>
-
-        <tr ng-repeat="week in monthView.weeks">
-            <td class="calDay"
-                title="{{date.booking.email}}"
-                ng-repeat="date in week.days"
-                ng-class="{busy : date.isBusy, newRes : hover, notCurrentMonth : !date.isCurrentMonth}"
-                ng-mouseenter="hover = true"
-                ng-mouseleave="hover = false"
-                ng-click="monthView.newBooking('<%=userEmail%>',date)">
-                {{date.label}}
-            </td>
-        </tr>
-    </table>
     <br/>
     <div class="btn-group">
-            <button ng-repeat="month in monthView.months"
-                    ng-click="monthView.changeMonth(month)"
-                    type="button" class="btn btn-default">{{month}}</button>
-            <!--<button type="button" class="btn btn-default btn-sm"><strong class="ng-binding">{{month}}</strong></button>-->
+        <button ng-repeat="month in monthView.months"
+                ng-click="monthView.changeMonth(month)"
+                type="button" class="btn btn-default">{{month}}</button>
+        <!--<button type="button" class="btn btn-default btn-sm"><strong class="ng-binding">{{month}}</strong></button>-->
     </div>
+    <br/>
+    <br/>
+    <div class="wrapper" style="float:left;">
+        <div style="margin:10px;margin-left:200px;">
+            <%
+            for(var i=0;i < resources.length;i++){
+                if(i!=0){%> | <%}
+                if (resourceId==resources[i]._id){
+                    %><b><%=resources[i].name%></b> <%
+                }else{
+                    %> &#160;&#160;<a href="/monthView/<%=resources[i]._id%>"><%=resources[i].name%></a><%
+                }
+            }
+            %>
+        </div>
+        <table class="monthView">
+            <!--navigering (forrige måned, neste måned)-->
+            <tr class="monthBtns">
+                <th>
+                    <button type="button" class="btn btn-default btn-sm pull-left" ng-click="monthView.changeMonth(-1)"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                </th>
+                <th colspan="6">
+                    <button type="button" class="btn btn-default btn-sm btn-block"><strong class="ng-binding">{{monthView.currentMonth}}</strong></button>
+                </th>
+                <th><button type="button" class="btn btn-default btn-sm pull-left" ng-click="monthView.changeMonth(1)"><i class="glyphicon glyphicon-chevron-right"></i></button></th>
+            </tr>
+            <!--Ukedager-->
+            <tr>
+                <th class="center" ng-show="monthView.showWeekNumbers">#</th>
+                <th class="center"
+                    ng-repeat="dayOfWeek in monthView.daysOfWeek"
+                    ng-style="{borderRight:'{{$index!=6?none:1}}px'}">
+                    {{dayOfWeek.indexOf('none')!=0?dayOfWeek:''}}
+                </th>
+            </tr>
+
+            <tr ng-repeat="week in monthView.calendarView.weeks">
+                <td ng-show="monthView.showWeekNumbers" class="center">
+                    <em>{{week.number}}</em>
+                </td>
+                <td class="calDay"
+                    title="{{date.booking.email}}"
+                    ng-disabled="date.disabled"
+                    ng-repeat="date in week.days">
+                    <button type="button" style="width:100%;" class="btn btn-default btn-sm"
+                            ng-class="{greenDay : date.isGreenDay, greenBusyDay : date.isBusyGreenDay, notCurrentMonth : !date.isCurrentMonth, busy : date.isBusy}"
+                            ng-click="monthView.newBooking(date)"
+                            ng-mouseenter="monthView.showThisBooking(date)"
+                            ng-mouseleave="monthView.hideBooking(date)">
+                        <span>{{date.label}}</span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br/>
+    <div style="float:left;margin-top:20px;width:300px;">
+        <div class="box">
+            <h4>Gr&#248;nne perioder</h4>
+            <p ng-repeat="gp in monthView.calendarView.greenPeriods">
+                {{gp.from | date:'dd/MM'}} - {{gp.to | date:'dd/MM'}}  ({{gp.desc}})
+            </p>
+        </div>
+        </div>
 </div>
+
 <% include newReservationTemplate %>
 </body>
 </html>

@@ -33,6 +33,8 @@ UserSchema.plugin(mongooseAuth, {
     }
 });
 
+/*
+TODO: add use to the DB
 function addUser (source, sourceUser) {
     var user;
     if (arguments.length === 1) { // password-based
@@ -44,7 +46,7 @@ function addUser (source, sourceUser) {
         user[source] = sourceUser;
     }
     return user;
-}
+}*/
 
 mongoose.model('User', UserSchema);
 

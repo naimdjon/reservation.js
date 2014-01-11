@@ -1,7 +1,4 @@
 <br/>
 <div style="float:right;padding:20px;">
-    <%=userEmail%>
-    <a href="/auth/google">
-        <img src="/gfx/sign-in-with-google.png" width="200px"/>
-    </a>
+    <%=locals.userEmail?userEmail:""%>
 </div>

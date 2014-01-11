@@ -20,7 +20,7 @@ fs.readdirSync(models_path).forEach(function (file) {
     if (~file.indexOf('.js')) require(models_path + '/' + file); //console.log("loading model "+(models_path + '/' + file))
 })
 var routes = require('./backend/routes');
-//var monthView = require('./backend/routes/index'); //monthView depends on the models
+var greenPeriods = require('./backend/routes/greenPeriods');
 var bookings = require('./backend/routes/bookings'); // booking  depends on the models
 
 var expressServer = express();
@@ -43,8 +43,7 @@ expressServer.use(express.static(path.join(__dirname, 'frontend')));
 expressServer.get('/', routes.index);
 expressServer.get('/bookings/:resourceId/:from',auth.loginFilter,bookings.list);
 expressServer.put('/booking', auth.loginFilter, bookings.new);
-expressServer.post('/bookings/move/:bookingId', bookings.move);
-expressServer.post('/bookings/change/:bookingId', bookings.changeDates);
+expressServer.get('/green_periods/:from::to', greenPeriods.index);
 expressServer.get('/monthView', routes.index);
 expressServer.get('/monthView/:resourceId', routes.showResourceMonthView);
 expressServer.get('/r/:resourceId', routes.showResourceMonthView);
