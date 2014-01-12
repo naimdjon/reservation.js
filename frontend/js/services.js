@@ -65,7 +65,7 @@ services.factory('monthViewService', function (bookingService) {
                 calendarView.greenPeriods=data;
                 calendarView.greenPeriods.forEach(function (greenPeriod) {
                     var from = moment(greenPeriod.from),to=moment(greenPeriod.to);
-                    if(from.month()==start.month()){
+                    if(from.month()==start.month() && from.year()==start.year()){
                         do{
                             var calendarDay = calendarView.weeks[weekOfMonth(from)].days[from.weekday()];
                             calendarDay.isBusy?calendarDay.isBusyGreenDay=true:calendarDay.isGreenDay = true;

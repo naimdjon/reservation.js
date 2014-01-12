@@ -1,11 +1,9 @@
 //    "dbURI":"mongodb://naimdjon:r3s3rvation.js@ds047468.mongolab.com:47468/heroku_app18425228?poolSize=2"
 var fs = require('fs')
 var express = require('express');
-//var everyauth = require('everyauth');
 var http = require('http');
 var path = require('path');
 bookingConfig = require('nconf').file({ file: 'config.json' });
-//mongooseAuth = require('mongoose-auth');
 moment = require('moment');
 mongoose = require('mongoose');
 require('./backend/db')
@@ -63,9 +61,3 @@ expressServer.get('/auth/google/return',passport.authenticate('google', {failure
 http.createServer(expressServer).listen(expressServer.get('port'), function(){
   console.log('Express server listening on port ' + expressServer.get('port'));
 });
-
-
-global.toDate=function toDate(momentDate){
-    return new Date(momentDate.year(),momentDate.month(),momentDate.date());
-}
-
