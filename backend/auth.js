@@ -100,13 +100,8 @@ function addUser (source, sourceUser) {
 
 
 exports.loginFilter=function(req, res, next) {
-    if(req.query.debug && req.session.auth) {
-        console.log("---google---");
-        console.log(req.session.auth.google.user);
-        console.log("is logged in:"+req.session.auth.loggedIn);
-    }
-    if (!req.session.user && req.session.auth && req.session.auth.loggedIn){
-        req.session.user = req.session.auth.google.user;
+    if (!req.session.passport && req.session.passport.user){
+        req.session.user = req.session.passport.user;
     }
 
     if (req.session.user) {

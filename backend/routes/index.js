@@ -1,6 +1,6 @@
 exports.index = function(request, response){
     console.dir(request.session);
-    if(!request.session || !request.session.passport) {
+    if(!request.session || !request.session.passport || !request.session.passport.user) {
         response.render('login');
         return;
     }else  if(request.session.resourceId) {

@@ -48,12 +48,12 @@ expressServer.use(expressServer.router);
 
 //define the routes (REST API) for our app
 expressServer.get('/', routes.index);
-expressServer.get('/bookings/:resourceId/:from',bookings.list);
-expressServer.put('/booking', bookings.new);
-expressServer.get('/green_periods/:from::to', greenPeriods.index);
 expressServer.get('/monthView', routes.index);
+expressServer.put('/booking', bookings.new);
+expressServer.get('/bookings/:resourceId/:from',bookings.list);
 expressServer.get('/monthView/:resourceId', routes.showResourceMonthView);
 expressServer.get('/r/:resourceId', routes.showResourceMonthView);
+expressServer.get('/green_periods/:from::to', greenPeriods.index);
 
 
 expressServer.get('/auth/google',passport.authenticate('google'));
