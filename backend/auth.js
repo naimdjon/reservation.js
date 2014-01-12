@@ -15,9 +15,11 @@ passport.deserializeUser(function(id, done) {
         done(err, user);
     });});
 
+var host="http://reservation-js.herokuapp.com/";
+//var host="http://localhost:8000/";
 passport.use(new GoogleStrategy({
-        returnURL: 'http://reservation-js.herokuap.com/auth/google/return',
-        realm: 'http://reservation-js.herokuap.com/'
+        returnURL: host+'auth/google/return',
+        realm: host
     },
     function(identifier, profile, done) {
         var email=profile.emails[0].value;
