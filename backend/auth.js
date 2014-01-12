@@ -16,8 +16,8 @@ passport.deserializeUser(function(id, done) {
     });});
 
 passport.use(new GoogleStrategy({
-        returnURL: 'http://localhost:8000/auth/google/return',
-        realm: 'http://localhost:8000/'
+        returnURL: 'http://reservation-js.herokuap.com/auth/google/return',
+        realm: 'http://reservation-js.herokuap.com/'
     },
     function(identifier, profile, done) {
         var email=profile.emails[0].value;
