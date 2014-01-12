@@ -5,8 +5,8 @@ var services = angular.module('reservationApp.services', []);
 
 services.factory('bookingService', function ($http) {
     var bookings;
-    var getBookingsForResource = function (resourceId,yearMonth) {
-        var promise = $http.get('/bookings/'+resourceId+"/"+yearMonth)
+    var getBookingsForResource = function (resourceId,from) {
+        var promise = $http.get('/bookings/'+resourceId+"/"+from)
             .then(function (res) {
                 bookings = res.data;
                 return bookings;
@@ -45,12 +45,15 @@ function weekOfMonth(d){
 services.factory('monthViewService', function (bookingService) {
     function addBookingsToView(start, weeks,resourceId) {
         bookingService.getBookingsForResource(resourceId, start.format('YYYY-MM-DD')).then(function (data) {
+            console.dir(data);
             data.forEach(function (booking) {
                 var from = moment(booking.from),to=moment(booking.to);
                 do{
                     var calendarDay = weeks[weekOfMonth(from)].days[from.weekday()];
-                    calendarDay.isBusy = true;
-                    calendarDay.booking = booking;
+                    if(calendarDay.month==from.month()){
+                        calendarDay.isBusy = true;
+                        calendarDay.booking = booking;
+                    }
                 }while (from.add('d', 1).isBefore(to) || from.isSame(to));
             });
         });
@@ -78,7 +81,7 @@ services.factory('monthViewService', function (bookingService) {
         while (runnerDate.isBefore(end)) {
             var week = {week: runnerDate.week(), days: [], number: runnerDate.isoWeek()};
             for (var weekDay = 0; weekDay <= 6; weekDay++) {
-                week.days.push({label: runnerDate.date(), isCurrentMonth: (start.month() == runnerDate.month()), momentDate: runnerDate.clone()});
+                week.days.push({label: runnerDate.date(),month:runnerDate.month(), isCurrentMonth: (start.month() == runnerDate.month()), momentDate: runnerDate.clone()});
                 runnerDate.add('d', 1);
             }
             weeks.push(week);

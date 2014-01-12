@@ -1,5 +1,5 @@
 
-var connection = new Mongo( "ds047468.mongolab.com:47468" );
-var db = connection.getDB( "heroku_app18425228" );
-db.auth( "naimdjon", "r3s3rvation.js" );
+var connection = new Mongo( "ds063178.mongolab.com:63178" );
+var db = connection.getDB( "heroku_app21171732" );
+db.auth( "bookingapp", "jpr0b00kingapp" );
 print( "> MongoLab: connected to the DB." );

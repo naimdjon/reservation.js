@@ -1,9 +1,54 @@
-var usersById={};
+/*var usersById={};
 var nextUserId = 0;
 
 var UserSchema = new Schema({})
-    , User;
-UserSchema.plugin(mongooseAuth, {
+    , User;*/
+
+GoogleStrategy = require('passport-google').Strategy;
+
+passport.serializeUser(function(user, done) {
+    done(null, user);
+});
+
+passport.deserializeUser(function(id, done) {
+    User.findById(id, function(err, user) {
+        done(err, user);
+    });});
+
+passport.use(new GoogleStrategy({
+        returnURL: 'http://localhost:8000/auth/google/return',
+        realm: 'http://localhost:8000/'
+    },
+    function(identifier, profile, done) {
+        var email=profile.emails[0].value;
+        /*process.nextTick(function () {
+
+         // To keep the example simple, the user's Google profile is returned to
+         // represent the logged-in user.  In a typical application, you would want
+         // to associate the Google account with a user record in your database,
+         // and return that user instead.
+         profile.identifier = identifier;
+         return done(null, profile);
+         });*/
+        //return done(null, profile);
+        User.findById(email, function(err, user) {
+            console.log("user:::"+user);
+            console.log("err:::"+err);
+            if(!user){
+                user =new User;
+                user._id=email;
+                user.email=email;
+                user.name=profile.displayName;
+                user.save();
+            }
+            return done(err, user);
+        });
+    }
+));
+
+
+
+/*UserSchema.plugin(mongooseAuth, {
     everymodule: {
         everyauth: {
             User: function () {
@@ -31,7 +76,9 @@ UserSchema.plugin(mongooseAuth, {
             }
         }
     }
-});
+});*/
+
+
 
 /*
 TODO: add use to the DB
@@ -48,7 +95,7 @@ function addUser (source, sourceUser) {
     return user;
 }*/
 
-mongoose.model('User', UserSchema);
+//mongoose.model('User', UserSchema);
 
 
 

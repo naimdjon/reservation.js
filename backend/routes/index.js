@@ -1,5 +1,6 @@
 exports.index = function(request, response){
-    if(!request.session.auth) {
+    console.dir(request.session);
+    if(!request.session || !request.session.passport) {
         response.render('login');
         return;
     }else  if(request.session.resourceId) {
@@ -11,7 +12,7 @@ exports.index = function(request, response){
             if (!resources) return next(new Error('not found'))
             request.session.resources=resources;
             response.render('selectResource',{
-                userEmail:request.session.auth?request.session.auth.google.user.email:"",
+                userEmail:request.session.passport && request.session.passport.user ? request.session.passport.user._id:"",
                 title:'Select resource for month view',
                 resources:resources
             });
@@ -20,7 +21,7 @@ exports.index = function(request, response){
 };
 
 exports.showResourceMonthView = function(request, response){
-    if(!request.session.auth) {
+    if(!request.session.passport || !request.session.passport.user) {
         response.render('login');
         return;
     }
@@ -28,7 +29,7 @@ exports.showResourceMonthView = function(request, response){
     request.session.resourceId=resourceId;
     Resource.findById(resourceId,function (err, resource) {
         response.render('index',{
-            userEmail:request.session.auth?request.session.auth.google.user.email:"",
+            userEmail:request.session.passport && request.session.passport.user?request.session.passport.user._id:"",
             title: 'Booking.js, ',
             resourceName: resource.name,
             resources:request.session.resources,

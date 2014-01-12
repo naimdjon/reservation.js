@@ -58,7 +58,6 @@
                     <em>{{week.number}}</em>
                 </td>
                 <td class="calDay"
-                    title="{{date.booking.email}}"
                     ng-disabled="date.disabled"
                     ng-repeat="date in week.days">
                     <button type="button" style="width:100%;" class="btn btn-default btn-sm"
@@ -66,7 +65,7 @@
                             ng-click="monthView.newBooking(date)"
                             ng-mouseenter="monthView.showThisBooking(date)"
                             ng-mouseleave="monthView.hideBooking(date)">
-                        <span>{{date.label}}</span>
+                        <span tooltip-html-unsafe="{{date.booking.email}} <br/> {{date.booking.from | date:'dd.MM'}}  &#160;&#160;&#160;   {{date.booking.to | date:'dd.MM'}} <br/>{{date.booking._id}}">{{date.label}}</span>
                     </button>
                 </td>
             </tr>

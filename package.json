@@ -8,9 +8,9 @@
     "moment": "2.2.1",
     "nconf": "*",
     "mongoose": "*",
-    "stylus": "*",
-    "everyauth": "*"
-    ,"mongoose-auth":"*"
+    "stylus": "*"
+    ,"passport":"*"
+    ,"passport-google":"*"
   },
   "engines": {
     "node": "0.10.x",

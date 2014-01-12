@@ -2,10 +2,11 @@
 exports.list = function (request, response) {
     var resourceId = request.params.resourceId;
     var from = request.params.from;
-    var to = moment(from).add('M', 1).format('YYYY-MM-DD');
+    var to = moment(from).add('d', 40).format('YYYY-MM-DD');
     console.log("resourceId:" + resourceId+",from:"+from+", to:"+to);
     Booking.find({resourceId:resourceId})
-        .where('from').gte(from)
+        .where('from').gte(from).lt(to)
+        .where('to').lte(to)
         .exec(function (err, bookings) {
             if (err) return next(err)
             if (!bookings) return next(new Error('not found'))
