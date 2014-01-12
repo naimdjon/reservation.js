@@ -1,5 +1,5 @@
 exports.index = function(request, response){
-    console.dir(request.session);
+    //console.dir(request.session);
     if(!request.session || !request.session.passport || !request.session.passport.user) {
         response.render('login');
         return;
